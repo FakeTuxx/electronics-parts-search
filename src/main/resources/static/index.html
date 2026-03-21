@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elektronik Bauteil Suche</title>
+    <style>
+        :root {
+            --bg-1: #0f172a;
+            --bg-2: #111827;
+            --card: rgba(255, 255, 255, 0.92);
+            --card-strong: rgba(255, 255, 255, 0.97);
+            --text: #0f172a;
+            --text-soft: #475569;
+            --green: #16a34a;
+            --green-dark: #15803d;
+            --green-soft: rgba(22, 163, 74, 0.10);
+            --blue-soft: rgba(59, 130, 246, 0.10);
+            --table-head: #0f172a;
+            --shadow: 0 20px 60px rgba(2, 6, 23, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            background:
+                    radial-gradient(circle at top left, rgba(34, 197, 94, 0.16), transparent 28%),
+                    radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 24%),
+                    linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 36px 20px 56px;
+            position: relative;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 50;
+            overflow: visible;
+            background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 28px;
+            padding: 36px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.28);
+            margin-bottom: 24px;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.12);
+            color: #e5e7eb;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 42px;
+            line-height: 1.05;
+            color: #ffffff;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 760px;
+            color: rgba(255,255,255,0.82);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(120px, 1fr));
+            gap: 12px;
+            min-width: 320px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 18px;
+            padding: 16px;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .search-card {
+            margin-top: 24px;
+            position: relative;
+            z-index: 200;
+            overflow: visible;
+            background: var(--card-strong);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 14px;
+            align-items: start;
+        }
+
+        .input-area {
+            position: relative;
+            z-index: 500;
+            overflow: visible;
+        }
+
+        .input-wrap {
+            position: relative;
+            z-index: 501;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            height: 62px;
+            padding: 0 18px 0 56px;
+            border-radius: 18px;
+            border: 1px solid #dbe3ea;
+            font-size: 17px;
+            outline: none;
+            background: #ffffff;
+            color: var(--text);
+            transition: all 0.18s ease;
+        }
+
+        .input-wrap input:focus {
+            border-color: rgba(22, 163, 74, 0.55);
+            box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.10);
+        }
+
+        .input-wrap .icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            opacity: 0.65;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            display: none;
+            z-index: 9999;
+            background: #ffffff;
+            border: 1px solid #dbe3ea;
+            border-radius: 18px;
+            box-shadow: 0 24px 48px rgba(15, 23, 42, 0.22);
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: 320px;
+        }
+
+        .suggestion-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid #eef2f7;
+            cursor: pointer;
+            background: #ffffff;
+            transition: background 0.15s ease;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: #f8fafc;
+        }
+
+        .suggestion-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+
+        .suggestion-code {
+            font-family: monospace;
+            font-weight: bold;
+            color: #0f172a;
+            font-size: 14px;
+        }
+
+        .suggestion-type {
+            font-size: 12px;
+            font-weight: bold;
+            color: #2563eb;
+            background: rgba(59, 130, 246, 0.10);
+            padding: 4px 8px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .suggestion-name {
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .search-btn {
+            height: 62px;
+            min-width: 170px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(22, 163, 74, 0.28);
+        }
+
+        .search-btn:hover {
+            filter: brightness(1.03);
+        }
+
+        .chips {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .chip {
+            border: none;
+            background: #f3f4f6;
+            color: #1f2937;
+            padding: 10px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .chip:hover {
+            background: #e5e7eb;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            padding: 0 24px 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .metric {
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        .metric-label {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .metric-note {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.45fr 0.95fr;
+            gap: 24px;
+            margin-top: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .panel {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            padding: 22px 24px 14px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+        }
+
+        .panel-title {
+            margin: 0;
+            font-size: 22px;
+            color: #111827;
+        }
+
+        .panel-subtitle {
+            margin: 4px 0 0;
+            color: var(--text-soft);
+            font-size: 14px;
+        }
+
+        .summary-pill {
+            white-space: nowrap;
+            background: var(--green-soft);
+            color: var(--green-dark);
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .debug-box {
+            margin: 18px 24px 0;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 1px solid #e2e8f0;
+            color: #334155;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .result-area {
+            padding: 18px 24px 24px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 18px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        th {
+            background: var(--table-head);
+            color: white;
+            text-align: left;
+            padding: 14px 16px;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        tr:nth-child(even) td {
+            background: #fafbfd;
+        }
+
+        .mono {
+            font-family: monospace;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 7px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .tag-type {
+            background: rgba(59, 130, 246, 0.10);
+            color: #1d4ed8;
+        }
+
+        .tag-mount {
+            background: rgba(22, 163, 74, 0.10);
+            color: #15803d;
+        }
+
+        .stock-badge {
+            display: inline-flex;
+            justify-content: center;
+            min-width: 44px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: bold;
+            background: #eefbf2;
+            color: #15803d;
+        }
+
+        .stock-low {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .price-good {
+            font-weight: bold;
+            color: #15803d;
+        }
+
+        .cards {
+            padding: 18px 24px 24px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 18px;
+        }
+
+        .price-card-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .vendor {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #15803d;
+        }
+
+        .muted {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .empty-state {
+            padding: 28px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #fff7ed, #fffaf5);
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            font-weight: bold;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: rgba(255,255,255,0.72);
+            margin-top: 26px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page {
+                padding: 20px 14px 36px;
+            }
+
+            .hero {
+                padding: 22px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+                padding: 0 0 24px;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+                min-width: unset;
+            }
+
+            .suggestions {
+                top: 68px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <section class="hero">
+        <div class="hero-top">
+            <div>
+                <div class="badge">Elektronik Lager + Online Preisvergleich</div>
+                <h1>Bauteile schnell finden<br>und direkt auswählen</h1>
+                <p>
+                    Moderne Suche mit Vorschlägen beim Tippen. Finde Bauteilnummern, Namen oder Typen
+                    und vergleiche Lagerdaten und Online-Preise in einer sauberen Oberfläche.
+                </p>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-value">80+</div>
+                    <div class="stat-label">Beispielteile</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Online Anbieter</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">Auto</div>
+                    <div class="stat-label">Vorschlaege</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-card">
+            <div class="search-row">
+                <div class="input-area">
+                    <div class="input-wrap">
+                        <span class="icon">⌕</span>
+                        <input
+                                type="text"
+                                id="partNumber"
+                                placeholder="Bauteilnummer, Name oder Typ eingeben"
+                                autocomplete="off"
+                        >
+                    </div>
+                    <div class="suggestions" id="suggestions"></div>
+                </div>
+
+                <button class="search-btn" onclick="searchParts()">Suchen</button>
+            </div>
+
+            <div class="chips">
+                <button class="chip" onclick="fillAndSearch('1N4148')">1N4148</button>
+                <button class="chip" onclick="fillAndSearch('ATMEGA')">ATMEGA</button>
+                <button class="chip" onclick="fillAndSearch('LM358')">LM358</button>
+                <button class="chip" onclick="fillAndSearch('capacitor')">capacitor</button>
+                <button class="chip" onclick="fillAndSearch('transistor')">transistor</button>
+                <button class="chip" onclick="fillAndSearch('led')">led</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="metrics">
+        <div class="metric">
+            <div class="metric-label">Suchstatus</div>
+            <div class="metric-value" id="metricStatus">Bereit</div>
+            <div class="metric-note">Warte auf Eingabe</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Treffer</div>
+            <div class="metric-value" id="metricCount">0</div>
+            <div class="metric-note">Lagerteile gefunden</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Online Durchschnitt</div>
+            <div class="metric-value" id="metricAverage">EUR 0.000</div>
+            <div class="metric-note">Gemittelter Vergleichspreis</div>
+        </div>
+    </section>
+
+    <section class="content-grid">
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Lagerbestand</h2>
+                    <p class="panel-subtitle">Interne Bauteile aus deiner Datenquelle</p>
+                </div>
+                <div class="summary-pill" id="tableSummary">Noch keine Suche</div>
+            </div>
+
+            <div class="debug-box" id="debug">Bereit zur Suche</div>
+
+            <div class="result-area" id="results">
+                <div class="empty-state">
+                    Noch keine Suche durchgeführt. Tipp mal AT, LM oder 1N und schau auf die Vorschläge.
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Online Preise</h2>
+                    <p class="panel-subtitle">Vergleich mit externen Anbietern</p>
+                </div>
+                <div class="summary-pill" id="priceSummary">0 Anbieter</div>
+            </div>
+
+            <div class="cards" id="priceResults">
+                <div class="empty-state">
+                    Online-Preise erscheinen automatisch nach einer erfolgreichen Suche.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer-note">
+        Clean UI fuer Lagerabfrage, Autocomplete, SAP-Anbindung und Preisvergleich.
+    </div>
+</div>
+
+<script>
+    let suggestionTimeout = null;
+
+    function fillAndSearch(value) {
+        document.getElementById('partNumber').value = value;
+        hideSuggestions();
+        searchParts();
+    }
+
+    function formatPrice(value) {
+        return 'EUR ' + Number(value || 0).toFixed(3);
+    }
+
+    function getStockBadgeClass(stock) {
+        return stock < 50 ? 'stock-badge stock-low' : 'stock-badge';
+    }
+
+    function setMetrics(status, count, average) {
+        document.getElementById('metricStatus').textContent = status;
+        document.getElementById('metricCount').textContent = count;
+        document.getElementById('metricAverage').textContent = formatPrice(average);
+    }
+
+    function hideSuggestions() {
+        const box = document.getElementById('suggestions');
+        box.style.display = 'none';
+        box.innerHTML = '';
+    }
+
+    function showSuggestions(items) {
+        const box = document.getElementById('suggestions');
+
+        if (!items || items.length === 0) {
+            hideSuggestions();
+            return;
+        }
+
+        let html = '';
+        items.forEach(item => {
+            html += `
+                <div class="suggestion-item" onclick="selectSuggestion('${escapeJs(item.partNumber)}')">
+                    <div class="suggestion-top">
+                        <div class="suggestion-code">${escapeHtml(item.partNumber)}</div>
+                        <div class="suggestion-type">${escapeHtml(item.type || '')}</div>
+                    </div>
+                    <div class="suggestion-name">${escapeHtml(item.name || '')}</div>
+                </div>
+            `;
+        });
+
+        box.innerHTML = html;
+        box.style.display = 'block';
+    }
+
+    function selectSuggestion(partNumber) {
+        document.getElementById('partNumber').value = partNumber;
+        hideSuggestions();
+        searchParts();
+    }
+
+    function escapeHtml(text) {
+        return String(text)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function escapeJs(text) {
+        return String(text)
+            .replaceAll('\\', '\\\\')
+            .replaceAll("'", "\\'");
+    }
+
+    function loadSuggestions() {
+        const value = document.getElementById('partNumber').value.trim();
+
+        if (value.length < 2) {
+            hideSuggestions();
+            return;
+        }
+
+        fetch('/api/parts/suggestions?query=' + encodeURIComponent(value))
+            .then(response => response.json())
+            .then(data => showSuggestions(data))
+            .catch(() => hideSuggestions());
+    }
+
+    function searchParts() {
+        const input = document.getElementById('partNumber');
+        const searchValue = input.value.trim();
+
+        const debug = document.getElementById('debug');
+        const results = document.getElementById('results');
+        const priceResults = document.getElementById('priceResults');
+        const tableSummary = document.getElementById('tableSummary');
+        const priceSummary = document.getElementById('priceSummary');
+
+        hideSuggestions();
+
+        if (!searchValue) {
+            debug.textContent = 'Bitte einen Suchbegriff eingeben';
+            tableSummary.textContent = 'Keine Eingabe';
+            priceSummary.textContent = '0 Anbieter';
+            setMetrics('Leer', 0, 0);
+
+            results.innerHTML = `
+                <div class="empty-state">
+                    Bitte zuerst eine Bauteilnummer, einen Namen oder einen Typ eingeben.
+                </div>
+            `;
+
+            priceResults.innerHTML = `
+                <div class="empty-state">
+                    Noch keine Online-Preise verfuegbar.
+                </div>
+            `;
+            return;
+        }
+
+        debug.textContent = 'Suche nach: ' + searchValue + ' ...';
+        tableSummary.textContent = 'Suche laeuft';
+        priceSummary.textContent = 'Wird geladen';
+        setMetrics('Suche', 0, 0);
+
+        fetch('/api/parts/search?partNumber=' + encodeURIComponent(searchValue))
+            .then(response => response.json())
+            .then(result => {
+                const localParts = result.localParts || [];
+                const onlinePrices = result.onlinePrices || [];
+                const averageOnlinePrice = result.averageOnlinePrice || 0;
+                const message = result.message || 'Suche abgeschlossen';
+
+                debug.textContent = message;
+                tableSummary.textContent = localParts.length + ' Treffer';
+                priceSummary.textContent = onlinePrices.length + ' Anbieter';
+                setMetrics(localParts.length > 0 ? 'Gefunden' : 'Leer', localParts.length, averageOnlinePrice);
+
+                if (localParts.length === 0) {
+                    results.innerHTML = `
+                        <div class="empty-state">
+                            Keine passenden Lagerteile gefunden. Versuch es mit 1N4148, ATMEGA, LM358, resistor, capacitor oder transistor.
+                        </div>
+                    `;
+                } else {
+                    let html = `
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Bauteilnummer</th>
+                                        <th>Name</th>
+                                        <th>Typ</th>
+                                        <th>Bauart</th>
+                                        <th>Bestand</th>
+                                        <th>Einkaufspreis</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+
+                    localParts.forEach(part => {
+                        html += `
+                            <tr>
+                                <td class="mono">${escapeHtml(part.partNumber ?? '')}</td>
+                                <td>${escapeHtml(part.name ?? '')}</td>
+                                <td><span class="tag tag-type">${escapeHtml(part.type ?? '')}</span></td>
+                                <td><span class="tag tag-mount">${escapeHtml(part.mountType ?? '')}</span></td>
+                                <td><span class="${getStockBadgeClass(part.stockQuantity ?? 0)}">${part.stockQuantity ?? 0}</span></td>
+                                <td class="price-good">${formatPrice(part.purchasePriceEur ?? 0)}</td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+
+                    results.innerHTML = html;
+                }
+
+                if (onlinePrices.length === 0) {
+                    priceResults.innerHTML = `
+                        <div class="empty-state">
+                            Keine Online-Preise verfuegbar.
+                        </div>
+                    `;
+                } else {
+                    let cards = '';
+
+                    onlinePrices.forEach(price => {
+                        cards += `
+                            <div class="price-card">
+                                <div class="price-card-top">
+                                    <div class="vendor">${escapeHtml(price.vendor ?? '')}</div>
+                                    <div class="price">${formatPrice(price.priceEur ?? 0)}</div>
+                                </div>
+                                <div class="muted">
+                                    Vergleichspreis fuer das aktuell gefundene Bauteil.
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    priceResults.innerHTML = cards;
+                }
+            })
+            .catch(() => {
+                debug.textContent = 'Fehler bei der Suche';
+                tableSummary.textContent = 'Fehler';
+                priceSummary.textContent = 'Fehler';
+                setMetrics('Fehler', 0, 0);
+
+                results.innerHTML = `
+                    <div class="empty-state">
+                        Bei der Suche ist ein Fehler aufgetreten.
+                    </div>
+                `;
+
+                priceResults.innerHTML = `
+                    <div class="empty-state">
+                        Online-Preise konnten nicht geladen werden.
+                    </div>
+                `;
+            });
+    }
+
+    const input = document.getElementById('partNumber');
+
+    input.addEventListener('input', function() {
+        clearTimeout(suggestionTimeout);
+        suggestionTimeout = setTimeout(loadSuggestions, 180);
+    });
+
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            hideSuggestions();
+            searchParts();
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        const inputArea = document.querySelector('.input-area');
+        if (!inputArea.contains(event.target)) {
+            hideSuggestions();
+        }
+    });
+</script>
+</body>
+</html>
