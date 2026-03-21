@@ -18,6 +18,8 @@
             --blue-soft: rgba(59, 130, 246, 0.10);
             --table-head: #0f172a;
             --shadow: 0 20px 60px rgba(2, 6, 23, 0.18);
+            --link: #2563eb;
+            --link-hover: #1d4ed8;
         }
 
         * {
@@ -37,7 +39,7 @@
         }
 
         .page {
-            max-width: 1240px;
+            max-width: 1380px;
             margin: 0 auto;
             padding: 36px 20px 56px;
             position: relative;
@@ -388,7 +390,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 760px;
+            min-width: 1280px;
         }
 
         th {
@@ -404,6 +406,7 @@
             border-bottom: 1px solid #eef2f7;
             font-size: 14px;
             color: #1f2937;
+            vertical-align: top;
         }
 
         tr:nth-child(even) td {
@@ -455,6 +458,12 @@
             color: #15803d;
         }
 
+        .tier-price {
+            font-weight: bold;
+            color: #0f172a;
+            white-space: nowrap;
+        }
+
         .cards {
             padding: 18px 24px 24px;
             display: grid;
@@ -473,12 +482,24 @@
             justify-content: space-between;
             gap: 12px;
             margin-bottom: 10px;
+            align-items: center;
         }
 
         .vendor {
             font-size: 16px;
             font-weight: bold;
             color: #111827;
+        }
+
+        .vendor-link {
+            color: var(--link);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .vendor-link:hover {
+            color: var(--link-hover);
+            text-decoration: underline;
         }
 
         .price {
@@ -490,6 +511,25 @@
         .muted {
             color: #64748b;
             font-size: 13px;
+        }
+
+        .shop-link-wrap {
+            margin-top: 12px;
+        }
+
+        .shop-link {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(59, 130, 246, 0.10);
+            color: #1d4ed8;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .shop-link:hover {
+            background: rgba(59, 130, 246, 0.16);
         }
 
         .empty-state {
@@ -747,6 +787,14 @@
             .replaceAll("'", "\\'");
     }
 
+    function safeUrl(url) {
+        const value = String(url || '').trim();
+        if (value.startsWith('http://') || value.startsWith('https://')) {
+            return value;
+        }
+        return '#';
+    }
+
     function loadSuggestions() {
         const value = document.getElementById('partNumber').value.trim();
 
@@ -828,7 +876,11 @@
                                         <th>Typ</th>
                                         <th>Bauart</th>
                                         <th>Bestand</th>
-                                        <th>Einkaufspreis</th>
+                                        <th>Einkauf</th>
+                                        <th>1 Stk</th>
+                                        <th>10 Stk</th>
+                                        <th>100 Stk</th>
+                                        <th>1000 Stk</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -843,6 +895,10 @@
                                 <td><span class="tag tag-mount">${escapeHtml(part.mountType ?? '')}</span></td>
                                 <td><span class="${getStockBadgeClass(part.stockQuantity ?? 0)}">${part.stockQuantity ?? 0}</span></td>
                                 <td class="price-good">${formatPrice(part.purchasePriceEur ?? 0)}</td>
+                                <td class="tier-price">${formatPrice(part.price1Eur ?? 0)}</td>
+                                <td class="tier-price">${formatPrice(part.price10Eur ?? 0)}</td>
+                                <td class="tier-price">${formatPrice(part.price100Eur ?? 0)}</td>
+                                <td class="tier-price">${formatPrice(part.price1000Eur ?? 0)}</td>
                             </tr>
                         `;
                     });
@@ -866,14 +922,25 @@
                     let cards = '';
 
                     onlinePrices.forEach(price => {
+                        const link = safeUrl(price.url);
+
                         cards += `
                             <div class="price-card">
                                 <div class="price-card-top">
-                                    <div class="vendor">${escapeHtml(price.vendor ?? '')}</div>
+                                    <div class="vendor">
+                                        <a class="vendor-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
+                                            ${escapeHtml(price.vendor ?? '')}
+                                        </a>
+                                    </div>
                                     <div class="price">${formatPrice(price.priceEur ?? 0)}</div>
                                 </div>
                                 <div class="muted">
                                     Vergleichspreis fuer das aktuell gefundene Bauteil.
+                                </div>
+                                <div class="shop-link-wrap">
+                                    <a class="shop-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
+                                        Zum Anbieter
+                                    </a>
                                 </div>
                             </div>
                         `;
