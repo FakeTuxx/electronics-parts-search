@@ -5,10 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class OnlinePriceInfo {
-    private String vendor;
-    private double priceEur;
-    private String url;
+    private String vendorName;
+    private String productUrl;
+    private Double unitPrice;
+    private Double price10;
+    private Double price100;
+    private Double price1000;
+    private boolean available;
 }

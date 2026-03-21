@@ -3,23 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elektronik Bauteil Suche</title>
+    <title>RSG Elektronik - Bauteilsuche</title>
     <style>
         :root {
-            --bg-1: #0f172a;
-            --bg-2: #111827;
-            --card: rgba(255, 255, 255, 0.92);
-            --card-strong: rgba(255, 255, 255, 0.97);
-            --text: #0f172a;
-            --text-soft: #475569;
-            --green: #16a34a;
-            --green-dark: #15803d;
-            --green-soft: rgba(22, 163, 74, 0.10);
-            --blue-soft: rgba(59, 130, 246, 0.10);
-            --table-head: #0f172a;
-            --shadow: 0 20px 60px rgba(2, 6, 23, 0.18);
-            --link: #2563eb;
-            --link-hover: #1d4ed8;
+            --rsg-blue: #3f5f8c;
+            --rsg-blue-dark: #2f4c75;
+            --rsg-blue-deep: #203754;
+            --rsg-blue-light: #6f89ac;
+            --rsg-silver: #aab4c0;
+            --rsg-silver-soft: #d8dee6;
+            --bg-main: #eef3f8;
+            --bg-panel: rgba(255, 255, 255, 0.94);
+            --bg-panel-strong: rgba(255, 255, 255, 0.98);
+            --text-main: #1f2f44;
+            --text-soft: #5f6f82;
+            --success: #1f8a4d;
+            --success-soft: rgba(31, 138, 77, 0.10);
+            --warning: #c56a18;
+            --warning-soft: rgba(197, 106, 24, 0.12);
+            --border-soft: #d9e2ec;
+            --shadow-soft: 0 14px 34px rgba(32, 55, 84, 0.10);
+            --shadow-strong: 0 24px 60px rgba(32, 55, 84, 0.18);
+            --link: #315d97;
+            --link-hover: #24466f;
         }
 
         * {
@@ -29,36 +35,43 @@
         html, body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text-main);
             background:
-                    radial-gradient(circle at top left, rgba(34, 197, 94, 0.16), transparent 28%),
-                    radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 24%),
-                    linear-gradient(135deg, var(--bg-1), var(--bg-2));
+                    radial-gradient(circle at top left, rgba(63, 95, 140, 0.12), transparent 24%),
+                    radial-gradient(circle at top right, rgba(111, 137, 172, 0.16), transparent 22%),
+                    linear-gradient(180deg, #f7f9fc 0%, #eef3f8 48%, #e7edf5 100%);
             min-height: 100vh;
         }
 
         .page {
-            max-width: 1380px;
+            max-width: 1440px;
             margin: 0 auto;
-            padding: 36px 20px 56px;
-            position: relative;
+            padding: 28px 20px 42px;
         }
 
         .hero {
             position: relative;
-            z-index: 50;
             overflow: visible;
-            background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 28px;
-            padding: 36px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.28);
-            margin-bottom: 24px;
+            background: linear-gradient(135deg, rgba(32, 55, 84, 0.96), rgba(47, 76, 117, 0.94));
+            border-radius: 30px;
+            box-shadow: var(--shadow-strong);
+            padding: 30px 30px 24px;
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
-        .hero-top {
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            background:
+                    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.10), transparent 18%),
+                    radial-gradient(circle at 86% 24%, rgba(255,255,255,0.08), transparent 16%);
+            pointer-events: none;
+        }
+
+        .topbar {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -68,48 +81,91 @@
             z-index: 2;
         }
 
-        .badge {
+        .brand-block {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .logo-shell {
+            width: 110px;
+            height: 78px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        .logo-shell svg {
+            width: 84px;
+            height: 52px;
+            display: block;
+        }
+
+        .brand-text h1 {
+            margin: 0;
+            font-size: 40px;
+            line-height: 1;
+            letter-spacing: -1px;
+            color: #ffffff;
+        }
+
+        .brand-text .subline {
+            margin-top: 4px;
+            font-size: 18px;
+            letter-spacing: 6px;
+            color: rgba(216, 222, 230, 0.92);
+            text-transform: uppercase;
+        }
+
+        .brand-chip {
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            width: fit-content;
             padding: 8px 14px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.12);
-            color: #e5e7eb;
-            font-size: 13px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: #e4ebf5;
+            font-size: 12px;
             font-weight: bold;
-            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
         }
 
-        .hero h1 {
-            margin: 0 0 10px;
-            font-size: 42px;
-            line-height: 1.05;
-            color: #ffffff;
-            letter-spacing: -1px;
-        }
-
-        .hero p {
-            margin: 0;
+        .hero-copy {
             max-width: 760px;
-            color: rgba(255,255,255,0.82);
-            font-size: 16px;
-            line-height: 1.6;
+            margin-top: 8px;
+            color: rgba(230, 236, 243, 0.88);
+            font-size: 15px;
+            line-height: 1.65;
         }
 
         .hero-stats {
             display: grid;
             grid-template-columns: repeat(3, minmax(120px, 1fr));
             gap: 12px;
-            min-width: 320px;
+            min-width: 340px;
         }
 
         .stat-card {
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 18px;
             padding: 16px;
             color: white;
+            backdrop-filter: blur(4px);
         }
 
         .stat-value {
@@ -120,19 +176,18 @@
 
         .stat-label {
             font-size: 13px;
-            color: rgba(255,255,255,0.75);
+            color: rgba(230, 236, 243, 0.78);
         }
 
         .search-card {
             margin-top: 24px;
             position: relative;
-            z-index: 200;
-            overflow: visible;
-            background: var(--card-strong);
+            z-index: 30;
+            background: var(--bg-panel-strong);
             border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.35);
+            box-shadow: var(--shadow-soft);
             padding: 18px;
-            box-shadow: var(--shadow);
         }
 
         .search-row {
@@ -144,40 +199,82 @@
 
         .input-area {
             position: relative;
-            z-index: 500;
-            overflow: visible;
+            z-index: 999;
         }
 
         .input-wrap {
             position: relative;
-            z-index: 501;
         }
 
         .input-wrap input {
             width: 100%;
             height: 62px;
-            padding: 0 18px 0 56px;
             border-radius: 18px;
-            border: 1px solid #dbe3ea;
-            font-size: 17px;
-            outline: none;
+            border: 1px solid var(--border-soft);
             background: #ffffff;
-            color: var(--text);
+            padding: 0 18px 0 56px;
+            font-size: 17px;
+            color: var(--text-main);
+            outline: none;
             transition: all 0.18s ease;
         }
 
         .input-wrap input:focus {
-            border-color: rgba(22, 163, 74, 0.55);
-            box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.10);
+            border-color: rgba(63, 95, 140, 0.55);
+            box-shadow: 0 0 0 4px rgba(63, 95, 140, 0.12);
         }
 
         .input-wrap .icon {
             position: absolute;
-            left: 18px;
             top: 50%;
+            left: 18px;
             transform: translateY(-50%);
             font-size: 20px;
-            opacity: 0.65;
+            color: var(--rsg-blue);
+            opacity: 0.8;
+        }
+
+        .search-btn {
+            height: 62px;
+            min-width: 180px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--rsg-blue), var(--rsg-blue-dark));
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 12px 26px rgba(47, 76, 117, 0.26);
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .search-btn:hover {
+            filter: brightness(1.03);
+            transform: translateY(-1px);
+        }
+
+        .chips {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .chip {
+            border: 1px solid #d7dfeb;
+            background: #f7f9fc;
+            color: var(--rsg-blue-deep);
+            padding: 10px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.15s ease;
+        }
+
+        .chip:hover {
+            background: #edf3fa;
+            border-color: #c8d4e4;
         }
 
         .suggestions {
@@ -186,21 +283,19 @@
             left: 0;
             right: 0;
             display: none;
-            z-index: 9999;
+            z-index: 99999;
             background: #ffffff;
-            border: 1px solid #dbe3ea;
+            border: 1px solid var(--border-soft);
             border-radius: 18px;
-            box-shadow: 0 24px 48px rgba(15, 23, 42, 0.22);
+            box-shadow: 0 20px 44px rgba(32, 55, 84, 0.18);
             overflow-y: auto;
-            overflow-x: hidden;
             max-height: 320px;
         }
 
         .suggestion-item {
             padding: 14px 16px;
-            border-bottom: 1px solid #eef2f7;
+            border-bottom: 1px solid #eef2f6;
             cursor: pointer;
-            background: #ffffff;
             transition: background 0.15s ease;
         }
 
@@ -209,7 +304,7 @@
         }
 
         .suggestion-item:hover {
-            background: #f8fafc;
+            background: #f7f9fc;
         }
 
         .suggestion-top {
@@ -222,82 +317,42 @@
         .suggestion-code {
             font-family: monospace;
             font-weight: bold;
-            color: #0f172a;
+            color: var(--rsg-blue-deep);
             font-size: 14px;
         }
 
         .suggestion-type {
             font-size: 12px;
             font-weight: bold;
-            color: #2563eb;
-            background: rgba(59, 130, 246, 0.10);
+            color: var(--rsg-blue-dark);
+            background: rgba(63, 95, 140, 0.10);
             padding: 4px 8px;
             border-radius: 999px;
             white-space: nowrap;
         }
 
         .suggestion-name {
-            color: #475569;
+            color: var(--text-soft);
             font-size: 13px;
-        }
-
-        .search-btn {
-            height: 62px;
-            min-width: 170px;
-            border: none;
-            border-radius: 18px;
-            background: linear-gradient(135deg, var(--green), var(--green-dark));
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 12px 28px rgba(22, 163, 74, 0.28);
-        }
-
-        .search-btn:hover {
-            filter: brightness(1.03);
-        }
-
-        .chips {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 14px;
-        }
-
-        .chip {
-            border: none;
-            background: #f3f4f6;
-            color: #1f2937;
-            padding: 10px 14px;
-            border-radius: 999px;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .chip:hover {
-            background: #e5e7eb;
         }
 
         .metrics {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 14px;
-            padding: 0 24px 24px;
-            position: relative;
-            z-index: 5;
+            margin-top: 22px;
         }
 
         .metric {
-            background: rgba(255,255,255,0.72);
-            border: 1px solid rgba(255,255,255,0.16);
-            border-radius: 20px;
+            background: var(--bg-panel);
+            border: 1px solid rgba(255,255,255,0.45);
+            border-radius: 22px;
             padding: 18px;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            box-shadow: var(--shadow-soft);
         }
 
         .metric-label {
-            color: #64748b;
+            color: var(--text-soft);
             font-size: 13px;
             margin-bottom: 8px;
         }
@@ -305,33 +360,28 @@
         .metric-value {
             font-size: 28px;
             font-weight: bold;
-            color: #111827;
+            color: var(--rsg-blue-deep);
         }
 
         .metric-note {
             margin-top: 8px;
             font-size: 12px;
-            color: #64748b;
+            color: var(--text-soft);
         }
 
-        .content-grid {
+        .stack-layout {
             display: grid;
-            grid-template-columns: 1.45fr 0.95fr;
+            grid-template-columns: 1fr;
             gap: 24px;
             margin-top: 24px;
-            position: relative;
-            z-index: 1;
         }
 
         .panel {
-            background: var(--card);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.18);
-            border-radius: 24px;
-            box-shadow: var(--shadow);
+            background: var(--bg-panel);
+            border: 1px solid rgba(255,255,255,0.44);
+            border-radius: 26px;
+            box-shadow: var(--shadow-soft);
             overflow: hidden;
-            position: relative;
-            z-index: 1;
         }
 
         .panel-header {
@@ -340,13 +390,14 @@
             align-items: center;
             gap: 14px;
             padding: 22px 24px 14px;
-            border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+            border-bottom: 1px solid rgba(32, 55, 84, 0.06);
+            background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.45));
         }
 
         .panel-title {
             margin: 0;
             font-size: 22px;
-            color: #111827;
+            color: var(--rsg-blue-deep);
         }
 
         .panel-subtitle {
@@ -357,21 +408,22 @@
 
         .summary-pill {
             white-space: nowrap;
-            background: var(--green-soft);
-            color: var(--green-dark);
+            background: rgba(63, 95, 140, 0.10);
+            color: var(--rsg-blue-dark);
             padding: 10px 14px;
             border-radius: 999px;
             font-weight: bold;
             font-size: 13px;
+            border: 1px solid rgba(63, 95, 140, 0.14);
         }
 
         .debug-box {
             margin: 18px 24px 0;
             padding: 14px 16px;
             border-radius: 16px;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border: 1px solid #e2e8f0;
-            color: #334155;
+            background: linear-gradient(135deg, #f7f9fc, #eff4f9);
+            border: 1px solid #dce5ef;
+            color: #42546a;
             font-family: monospace;
             font-size: 13px;
         }
@@ -383,18 +435,18 @@
         .table-wrap {
             overflow-x: auto;
             border-radius: 18px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #dce5ef;
             background: #ffffff;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1280px;
+            min-width: 1260px;
         }
 
         th {
-            background: var(--table-head);
+            background: linear-gradient(135deg, var(--rsg-blue-deep), var(--rsg-blue-dark));
             color: white;
             text-align: left;
             padding: 14px 16px;
@@ -403,14 +455,14 @@
 
         td {
             padding: 14px 16px;
-            border-bottom: 1px solid #eef2f7;
+            border-bottom: 1px solid #eef2f6;
             font-size: 14px;
-            color: #1f2937;
+            color: #223247;
             vertical-align: top;
         }
 
         tr:nth-child(even) td {
-            background: #fafbfd;
+            background: #fbfcfe;
         }
 
         .mono {
@@ -428,13 +480,13 @@
         }
 
         .tag-type {
-            background: rgba(59, 130, 246, 0.10);
-            color: #1d4ed8;
+            background: rgba(63, 95, 140, 0.10);
+            color: var(--rsg-blue-dark);
         }
 
         .tag-mount {
-            background: rgba(22, 163, 74, 0.10);
-            color: #15803d;
+            background: rgba(111, 137, 172, 0.14);
+            color: var(--rsg-blue-deep);
         }
 
         .stock-badge {
@@ -444,51 +496,81 @@
             padding: 6px 10px;
             border-radius: 999px;
             font-weight: bold;
-            background: #eefbf2;
-            color: #15803d;
+            background: #ebf7ef;
+            color: var(--success);
         }
 
         .stock-low {
-            background: #fff7ed;
-            color: #c2410c;
+            background: #fff5ea;
+            color: var(--warning);
         }
 
         .price-good {
             font-weight: bold;
-            color: #15803d;
+            color: var(--success);
         }
 
         .tier-price {
             font-weight: bold;
-            color: #0f172a;
+            color: var(--rsg-blue-deep);
             white-space: nowrap;
         }
 
-        .cards {
-            padding: 18px 24px 24px;
-            display: grid;
+        .horizontal-price-section {
+            padding: 18px 24px 28px;
+        }
+
+        .scroll-hint {
+            font-size: 13px;
+            color: var(--text-soft);
+            margin-bottom: 14px;
+        }
+
+        .cards-scroll {
+            display: flex;
             gap: 16px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 8px;
+            scroll-behavior: smooth;
+        }
+
+        .cards-scroll::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        .cards-scroll::-webkit-scrollbar-track {
+            background: #dde6f0;
+            border-radius: 999px;
+        }
+
+        .cards-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--rsg-blue), var(--rsg-blue-dark));
+            border-radius: 999px;
         }
 
         .price-card {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
-            border: 1px solid #e5e7eb;
-            border-radius: 20px;
+            flex: 0 0 320px;
+            min-width: 320px;
+            background: linear-gradient(135deg, #ffffff, #f7f9fc);
+            border: 1px solid #dce5ef;
+            border-radius: 22px;
             padding: 18px;
+            box-shadow: 0 8px 20px rgba(32, 55, 84, 0.05);
         }
 
         .price-card-top {
             display: flex;
             justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 14px;
             align-items: center;
+            margin-bottom: 10px;
         }
 
         .vendor {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: bold;
-            color: #111827;
+            color: var(--rsg-blue-deep);
         }
 
         .vendor-link {
@@ -505,12 +587,65 @@
         .price {
             font-size: 22px;
             font-weight: bold;
-            color: #15803d;
+            color: var(--success);
+            text-align: right;
+        }
+
+        .price-unavailable {
+            font-size: 18px;
+            font-weight: bold;
+            color: #90a0b2;
+            text-align: right;
         }
 
         .muted {
-            color: #64748b;
+            color: var(--text-soft);
             font-size: 13px;
+        }
+
+        .availability {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .available {
+            background: var(--success-soft);
+            color: var(--success);
+        }
+
+        .not-available {
+            background: #eef2f6;
+            color: #66778a;
+        }
+
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .tier-box {
+            background: #f8fbfe;
+            border: 1px solid #dde6f0;
+            border-radius: 14px;
+            padding: 10px;
+        }
+
+        .tier-label {
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-bottom: 4px;
+        }
+
+        .tier-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--rsg-blue-deep);
         }
 
         .shop-link-wrap {
@@ -521,54 +656,42 @@
             display: inline-block;
             padding: 10px 14px;
             border-radius: 12px;
-            background: rgba(59, 130, 246, 0.10);
-            color: #1d4ed8;
+            background: rgba(63, 95, 140, 0.10);
+            color: var(--rsg-blue-dark);
             text-decoration: none;
             font-weight: bold;
             font-size: 13px;
+            border: 1px solid rgba(63, 95, 140, 0.12);
         }
 
         .shop-link:hover {
-            background: rgba(59, 130, 246, 0.16);
+            background: rgba(63, 95, 140, 0.16);
         }
 
         .empty-state {
             padding: 28px;
             border-radius: 20px;
-            background: linear-gradient(135deg, #fff7ed, #fffaf5);
-            border: 1px solid #fed7aa;
-            color: #9a3412;
+            background: linear-gradient(135deg, #f6f9fc, #eef4fa);
+            border: 1px solid #dbe5ef;
+            color: var(--rsg-blue-dark);
             font-weight: bold;
         }
 
         .footer-note {
             text-align: center;
-            color: rgba(255,255,255,0.72);
-            margin-top: 26px;
+            color: #6a7b8f;
+            margin-top: 24px;
             font-size: 13px;
         }
 
-        @media (max-width: 1024px) {
-            .content-grid {
+        @media (max-width: 900px) {
+            .metrics {
                 grid-template-columns: 1fr;
             }
 
-            .hero h1 {
-                font-size: 34px;
-            }
-        }
-
-        @media (max-width: 720px) {
-            .page {
-                padding: 20px 14px 36px;
-            }
-
-            .hero {
-                padding: 22px;
-            }
-
-            .hero h1 {
-                font-size: 28px;
+            .hero-stats {
+                grid-template-columns: 1fr;
+                min-width: unset;
             }
 
             .search-row {
@@ -579,18 +702,33 @@
                 width: 100%;
             }
 
-            .metrics {
-                grid-template-columns: 1fr;
-                padding: 0 0 24px;
+            .brand-text h1 {
+                font-size: 30px;
             }
 
-            .hero-stats {
-                grid-template-columns: 1fr;
-                min-width: unset;
+            .brand-text .subline {
+                font-size: 15px;
+                letter-spacing: 4px;
             }
 
-            .suggestions {
-                top: 68px;
+            .price-card {
+                flex: 0 0 280px;
+                min-width: 280px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 18px 14px 30px;
+            }
+
+            .hero {
+                padding: 22px 18px 18px;
+            }
+
+            .price-card {
+                flex: 0 0 260px;
+                min-width: 260px;
             }
         }
     </style>
@@ -598,28 +736,45 @@
 <body>
 <div class="page">
     <section class="hero">
-        <div class="hero-top">
-            <div>
-                <div class="badge">Elektronik Lager + Online Preisvergleich</div>
-                <h1>Bauteile schnell finden<br>und direkt auswählen</h1>
-                <p>
-                    Moderne Suche mit Vorschlägen beim Tippen. Finde Bauteilnummern, Namen oder Typen
-                    und vergleiche Lagerdaten und Online-Preise in einer sauberen Oberfläche.
-                </p>
+        <div class="topbar">
+            <div class="brand-block">
+                <div class="brand-chip">RSG Elektronik • Lager & Online Preisvergleich</div>
+
+                <div class="brand-row">
+                    <div class="logo-shell" aria-label="RSG Elektronik Logo">
+                        <svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="10,20 88,20 108,34 74,34 74,94 46,118 46,48 10,48" fill="#5f7ea8"/>
+                            <path d="M92 20 L162 20 C182 20 194 28 194 42 C194 56 184 63 168 67 L194 100 L162 100 L138 71 L120 71 L120 100 L92 100 Z" fill="#5f7ea8"/>
+                            <path d="M112 45 L155 45 C161 45 166 42 166 36 C166 31 161 28 155 28 L112 28 Z" fill="#ffffff" opacity="0.10"/>
+                            <path d="M202 20 L142 20 L120 44 L178 44 C184 44 188 46 188 50 C188 54 184 56 178 56 L152 56 C132 56 118 66 118 80 C118 95 130 100 150 100 L210 100 L210 76 L154 76 C148 76 144 74 144 70 C144 66 148 64 154 64 L180 64 C200 64 214 56 214 40 C214 28 206 20 202 20 Z" fill="#5f7ea8"/>
+                        </svg>
+                    </div>
+
+                    <div class="brand-text">
+                        <h1>RSG</h1>
+                        <div class="subline">Elektronik</div>
+                    </div>
+                </div>
+
+                <div class="hero-copy">
+                    Moderne Bauteilsuche für Lagerteile und externe Anbieter.
+                    Suche nach Part Number, Name oder Typ, prüfe Lagerbestand
+                    und vergleiche Einzel- und Staffelpreise übersichtlich in einem Schritt.
+                </div>
             </div>
 
             <div class="hero-stats">
                 <div class="stat-card">
-                    <div class="stat-value">80+</div>
-                    <div class="stat-label">Beispielteile</div>
+                    <div class="stat-value">RSG</div>
+                    <div class="stat-label">Branding integriert</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">5</div>
+                    <div class="stat-value">18</div>
                     <div class="stat-label">Online Anbieter</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">Auto</div>
-                    <div class="stat-label">Vorschlaege</div>
+                    <div class="stat-value">Live</div>
+                    <div class="stat-label">Suche mit Vorschlägen</div>
                 </div>
             </div>
         </div>
@@ -639,7 +794,7 @@
                     <div class="suggestions" id="suggestions"></div>
                 </div>
 
-                <button class="search-btn" onclick="searchParts()">Suchen</button>
+                <button class="search-btn" onclick="searchParts()">Bauteil suchen</button>
             </div>
 
             <div class="chips">
@@ -657,26 +812,26 @@
         <div class="metric">
             <div class="metric-label">Suchstatus</div>
             <div class="metric-value" id="metricStatus">Bereit</div>
-            <div class="metric-note">Warte auf Eingabe</div>
+            <div class="metric-note">RSG Elektronik Suchsystem ist startklar</div>
         </div>
         <div class="metric">
             <div class="metric-label">Treffer</div>
             <div class="metric-value" id="metricCount">0</div>
-            <div class="metric-note">Lagerteile gefunden</div>
+            <div class="metric-note">Gefundene Lagerteile</div>
         </div>
         <div class="metric">
             <div class="metric-label">Online Durchschnitt</div>
             <div class="metric-value" id="metricAverage">EUR 0.000</div>
-            <div class="metric-note">Gemittelter Vergleichspreis</div>
+            <div class="metric-note">Gemittelter Einzelpreis über Anbieter</div>
         </div>
     </section>
 
-    <section class="content-grid">
+    <section class="stack-layout">
         <div class="panel">
             <div class="panel-header">
                 <div>
-                    <h2 class="panel-title">Lagerbestand</h2>
-                    <p class="panel-subtitle">Interne Bauteile aus deiner Datenquelle</p>
+                    <h2 class="panel-title">RSG Lagerbestand</h2>
+                    <p class="panel-subtitle">Interne Treffer aus deiner Bauteildatenbank</p>
                 </div>
                 <div class="summary-pill" id="tableSummary">Noch keine Suche</div>
             </div>
@@ -685,7 +840,7 @@
 
             <div class="result-area" id="results">
                 <div class="empty-state">
-                    Noch keine Suche durchgeführt. Tipp mal AT, LM oder 1N und schau auf die Vorschläge.
+                    Noch keine Suche durchgeführt. Versuch zum Beispiel ATMEGA, LM358 oder 1N4148.
                 </div>
             </div>
         </div>
@@ -693,13 +848,13 @@
         <div class="panel">
             <div class="panel-header">
                 <div>
-                    <h2 class="panel-title">Online Preise</h2>
-                    <p class="panel-subtitle">Vergleich mit externen Anbietern</p>
+                    <h2 class="panel-title">Online Preisvergleich</h2>
+                    <p class="panel-subtitle">Seitlich scrollbare Anbieteransicht</p>
                 </div>
                 <div class="summary-pill" id="priceSummary">0 Anbieter</div>
             </div>
 
-            <div class="cards" id="priceResults">
+            <div class="horizontal-price-section" id="priceResults">
                 <div class="empty-state">
                     Online-Preise erscheinen automatisch nach einer erfolgreichen Suche.
                 </div>
@@ -708,7 +863,7 @@
     </section>
 
     <div class="footer-note">
-        Clean UI fuer Lagerabfrage, Autocomplete, SAP-Anbindung und Preisvergleich.
+        RSG Elektronik • Bauteilsuche • Lagerdaten • Online Preisvergleich
     </div>
 </div>
 
@@ -722,7 +877,10 @@
     }
 
     function formatPrice(value) {
-        return 'EUR ' + Number(value || 0).toFixed(3);
+        if (value === null || value === undefined || isNaN(Number(value))) {
+            return '-';
+        }
+        return 'EUR ' + Number(value).toFixed(3);
     }
 
     function getStockBadgeClass(stock) {
@@ -835,14 +993,14 @@
 
             priceResults.innerHTML = `
                 <div class="empty-state">
-                    Noch keine Online-Preise verfuegbar.
+                    Noch keine Online-Preise verfügbar.
                 </div>
             `;
             return;
         }
 
         debug.textContent = 'Suche nach: ' + searchValue + ' ...';
-        tableSummary.textContent = 'Suche laeuft';
+        tableSummary.textContent = 'Suche läuft';
         priceSummary.textContent = 'Wird geladen';
         setMetrics('Suche', 0, 0);
 
@@ -894,11 +1052,11 @@
                                 <td><span class="tag tag-type">${escapeHtml(part.type ?? '')}</span></td>
                                 <td><span class="tag tag-mount">${escapeHtml(part.mountType ?? '')}</span></td>
                                 <td><span class="${getStockBadgeClass(part.stockQuantity ?? 0)}">${part.stockQuantity ?? 0}</span></td>
-                                <td class="price-good">${formatPrice(part.purchasePriceEur ?? 0)}</td>
-                                <td class="tier-price">${formatPrice(part.price1Eur ?? 0)}</td>
-                                <td class="tier-price">${formatPrice(part.price10Eur ?? 0)}</td>
-                                <td class="tier-price">${formatPrice(part.price100Eur ?? 0)}</td>
-                                <td class="tier-price">${formatPrice(part.price1000Eur ?? 0)}</td>
+                                <td class="price-good">${formatPrice(part.purchasePriceEur)}</td>
+                                <td class="tier-price">${formatPrice(part.price1Eur)}</td>
+                                <td class="tier-price">${formatPrice(part.price10Eur)}</td>
+                                <td class="tier-price">${formatPrice(part.price100Eur)}</td>
+                                <td class="tier-price">${formatPrice(part.price1000Eur)}</td>
                             </tr>
                         `;
                     });
@@ -915,28 +1073,59 @@
                 if (onlinePrices.length === 0) {
                     priceResults.innerHTML = `
                         <div class="empty-state">
-                            Keine Online-Preise verfuegbar.
+                            Keine Online-Preise verfügbar.
                         </div>
                     `;
                 } else {
-                    let cards = '';
+                    let cards = `
+                        <div class="scroll-hint">
+                            Anbieter seitlich verschieben, um alle Preis-Karten anzusehen.
+                        </div>
+                        <div class="cards-scroll">
+                    `;
 
                     onlinePrices.forEach(price => {
-                        const link = safeUrl(price.url);
+                        const link = safeUrl(price.productUrl);
+                        const availableClass = price.available ? 'availability available' : 'availability not-available';
+                        const availableText = price.available ? 'Preis verfügbar' : 'Kein Preis verfügbar';
+                        const displayPrice = price.available ? formatPrice(price.unitPrice) : 'Kein Preis';
 
                         cards += `
                             <div class="price-card">
                                 <div class="price-card-top">
                                     <div class="vendor">
                                         <a class="vendor-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
-                                            ${escapeHtml(price.vendor ?? '')}
+                                            ${escapeHtml(price.vendorName ?? '')}
                                         </a>
                                     </div>
-                                    <div class="price">${formatPrice(price.priceEur ?? 0)}</div>
+                                    <div class="${price.available ? 'price' : 'price-unavailable'}">${displayPrice}</div>
                                 </div>
+
                                 <div class="muted">
-                                    Vergleichspreis fuer das aktuell gefundene Bauteil.
+                                    Einzelpreis und Gesamtpreise für Mengenstaffeln.
                                 </div>
+
+                                <div class="${availableClass}">${availableText}</div>
+
+                                <div class="tier-grid">
+                                    <div class="tier-box">
+                                        <div class="tier-label">1 Stk</div>
+                                        <div class="tier-value">${formatPrice(price.unitPrice)}</div>
+                                    </div>
+                                    <div class="tier-box">
+                                        <div class="tier-label">10 Stk Gesamt</div>
+                                        <div class="tier-value">${formatPrice(price.price10)}</div>
+                                    </div>
+                                    <div class="tier-box">
+                                        <div class="tier-label">100 Stk Gesamt</div>
+                                        <div class="tier-value">${formatPrice(price.price100)}</div>
+                                    </div>
+                                    <div class="tier-box">
+                                        <div class="tier-label">1000 Stk Gesamt</div>
+                                        <div class="tier-value">${formatPrice(price.price1000)}</div>
+                                    </div>
+                                </div>
+
                                 <div class="shop-link-wrap">
                                     <a class="shop-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
                                         Zum Anbieter
@@ -946,10 +1135,13 @@
                         `;
                     });
 
+                    cards += `</div>`;
                     priceResults.innerHTML = cards;
                 }
             })
-            .catch(() => {
+            .catch(error => {
+                console.error('Fehler bei der Suche:', error);
+
                 debug.textContent = 'Fehler bei der Suche';
                 tableSummary.textContent = 'Fehler';
                 priceSummary.textContent = 'Fehler';
@@ -957,7 +1149,7 @@
 
                 results.innerHTML = `
                     <div class="empty-state">
-                        Bei der Suche ist ein Fehler aufgetreten.
+                        Bei der Suche ist ein Fehler aufgetreten. Bitte prüfe Backend, API oder Console.
                     </div>
                 `;
 
@@ -969,21 +1161,19 @@
             });
     }
 
-    const input = document.getElementById('partNumber');
-
-    input.addEventListener('input', function() {
+    document.getElementById('partNumber').addEventListener('input', function () {
         clearTimeout(suggestionTimeout);
         suggestionTimeout = setTimeout(loadSuggestions, 180);
     });
 
-    input.addEventListener('keydown', function(event) {
+    document.getElementById('partNumber').addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             hideSuggestions();
             searchParts();
         }
     });
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         const inputArea = document.querySelector('.input-area');
         if (!inputArea.contains(event.target)) {
             hideSuggestions();

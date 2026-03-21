@@ -21,7 +21,6 @@ public class PartController {
 
     @GetMapping("/search")
     public SearchResult searchParts(@RequestParam String partNumber) {
-
         String search = partNumber == null ? "" : partNumber.trim();
 
         List<Part> localParts = new ArrayList<>();
@@ -44,9 +43,14 @@ public class PartController {
         double average = 0.0;
 
         if (!localParts.isEmpty()) {
-            onlinePrices = priceService.getOctopartPricesByPartNumber(localParts.get(0).getPartNumber());
+            Part firstMatch = localParts.get(0);
+            onlinePrices = priceService.getOnlinePrices(firstMatch);
+
             average = onlinePrices.stream()
-                    .mapToDouble(OnlinePriceInfo::getPriceEur)
+                    .filter(OnlinePriceInfo::isAvailable)
+                    .map(OnlinePriceInfo::getUnitPrice)
+                    .filter(price -> price != null)
+                    .mapToDouble(Double::doubleValue)
                     .average()
                     .orElse(0.0);
         }
