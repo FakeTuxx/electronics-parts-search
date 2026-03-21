@@ -432,11 +432,38 @@
             padding: 18px 24px 24px;
         }
 
+        .table-scroll-hint {
+            font-size: 13px;
+            color: var(--text-soft);
+            margin-bottom: 12px;
+        }
+
         .table-wrap {
-            overflow-x: auto;
             border-radius: 18px;
             border: 1px solid #dce5ef;
             background: #ffffff;
+            overflow: hidden;
+        }
+
+        .table-scroll {
+            max-height: 420px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        .table-scroll::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        .table-scroll::-webkit-scrollbar-track {
+            background: #dde6f0;
+            border-radius: 999px;
+        }
+
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--rsg-blue), var(--rsg-blue-dark));
+            border-radius: 999px;
         }
 
         table {
@@ -446,6 +473,9 @@
         }
 
         th {
+            position: sticky;
+            top: 0;
+            z-index: 5;
             background: linear-gradient(135deg, var(--rsg-blue-deep), var(--rsg-blue-dark));
             color: white;
             text-align: left;
@@ -463,6 +493,10 @@
 
         tr:nth-child(even) td {
             background: #fbfcfe;
+        }
+
+        tbody tr:hover td {
+            background: #f2f7fc;
         }
 
         .mono {
@@ -1025,23 +1059,27 @@
                     `;
                 } else {
                     let html = `
+                        <div class="table-scroll-hint">
+                            Lagerbestand vertikal scrollen, um viele Treffer durchzublättern. Die Spaltenüberschrift bleibt oben sichtbar.
+                        </div>
                         <div class="table-wrap">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Bauteilnummer</th>
-                                        <th>Name</th>
-                                        <th>Typ</th>
-                                        <th>Bauart</th>
-                                        <th>Bestand</th>
-                                        <th>Einkauf</th>
-                                        <th>1 Stk</th>
-                                        <th>10 Stk</th>
-                                        <th>100 Stk</th>
-                                        <th>1000 Stk</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-scroll">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Bauteilnummer</th>
+                                            <th>Name</th>
+                                            <th>Typ</th>
+                                            <th>Bauart</th>
+                                            <th>Bestand</th>
+                                            <th>Einkauf</th>
+                                            <th>1 Stk</th>
+                                            <th>10 Stk</th>
+                                            <th>100 Stk</th>
+                                            <th>1000 Stk</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                     `;
 
                     localParts.forEach(part => {
@@ -1062,8 +1100,9 @@
                     });
 
                     html += `
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     `;
 
