@@ -554,10 +554,50 @@
             padding: 18px 24px 28px;
         }
 
+        .price-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
         .scroll-hint {
             font-size: 13px;
             color: var(--text-soft);
-            margin-bottom: 14px;
+            margin-bottom: 0;
+        }
+
+        .sort-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sort-label {
+            font-size: 13px;
+            color: var(--text-soft);
+            font-weight: bold;
+        }
+
+        .sort-select {
+            min-width: 220px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid #d7dfeb;
+            background: #ffffff;
+            color: var(--rsg-blue-deep);
+            padding: 0 12px;
+            font-size: 14px;
+            font-weight: bold;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .sort-select:focus {
+            border-color: rgba(63, 95, 140, 0.55);
+            box-shadow: 0 0 0 4px rgba(63, 95, 140, 0.12);
         }
 
         .cards-scroll {
@@ -749,6 +789,21 @@
                 flex: 0 0 280px;
                 min-width: 280px;
             }
+
+            .price-tools {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .sort-wrap {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .sort-select {
+                width: 100%;
+            }
         }
 
         @media (max-width: 640px) {
@@ -883,7 +938,7 @@
             <div class="panel-header">
                 <div>
                     <h2 class="panel-title">Online Preisvergleich</h2>
-                    <p class="panel-subtitle">Seitlich scrollbare Anbieteransicht</p>
+                    <p class="panel-subtitle">Seitlich scrollbare Anbieteransicht mit Preis-Sortierung</p>
                 </div>
                 <div class="summary-pill" id="priceSummary">0 Anbieter</div>
             </div>
@@ -903,6 +958,8 @@
 
 <script>
     let suggestionTimeout = null;
+    let currentOnlinePrices = [];
+    let currentPriceSortMode = 'default';
 
     function fillAndSearch(value) {
         document.getElementById('partNumber').value = value;
@@ -987,6 +1044,134 @@
         return '#';
     }
 
+    function getSortablePriceValue(price) {
+        if (!price || price.unitPrice === null || price.unitPrice === undefined || isNaN(Number(price.unitPrice))) {
+            return Number.POSITIVE_INFINITY;
+        }
+        return Number(price.unitPrice);
+    }
+
+    function sortOnlinePrices(prices, mode) {
+        const sorted = [...prices];
+
+        if (mode === 'priceAsc') {
+            sorted.sort((a, b) => {
+                const aValue = getSortablePriceValue(a);
+                const bValue = getSortablePriceValue(b);
+                return aValue - bValue;
+            });
+        } else if (mode === 'priceDesc') {
+            sorted.sort((a, b) => {
+                const aValue = getSortablePriceValue(a);
+                const bValue = getSortablePriceValue(b);
+                return bValue - aValue;
+            });
+
+            const unavailable = sorted.filter(item => !isFinite(getSortablePriceValue(item)));
+            const available = sorted.filter(item => isFinite(getSortablePriceValue(item)));
+            return [...available, ...unavailable];
+        }
+
+        return sorted;
+    }
+
+    function onPriceSortChange() {
+        const select = document.getElementById('priceSortSelect');
+        if (!select) {
+            return;
+        }
+        currentPriceSortMode = select.value;
+        renderOnlinePrices(currentOnlinePrices);
+    }
+
+    function renderOnlinePrices(prices) {
+        const priceResults = document.getElementById('priceResults');
+
+        if (!prices || prices.length === 0) {
+            priceResults.innerHTML = `
+                <div class="empty-state">
+                    Keine Online-Preise verfügbar.
+                </div>
+            `;
+            return;
+        }
+
+        const sortedPrices = sortOnlinePrices(prices, currentPriceSortMode);
+
+        let cards = `
+            <div class="price-tools">
+                <div class="scroll-hint">
+                    Anbieter seitlich verschieben, um alle Preis-Karten anzusehen.
+                </div>
+
+                <div class="sort-wrap">
+                    <label class="sort-label" for="priceSortSelect">Sortierung</label>
+                    <select class="sort-select" id="priceSortSelect" onchange="onPriceSortChange()">
+                        <option value="default" ${currentPriceSortMode === 'default' ? 'selected' : ''}>Standard</option>
+                        <option value="priceAsc" ${currentPriceSortMode === 'priceAsc' ? 'selected' : ''}>Preis aufsteigend</option>
+                        <option value="priceDesc" ${currentPriceSortMode === 'priceDesc' ? 'selected' : ''}>Preis absteigend</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="cards-scroll">
+        `;
+
+        sortedPrices.forEach(price => {
+            const link = safeUrl(price.productUrl);
+            const availableClass = price.available ? 'availability available' : 'availability not-available';
+            const availableText = price.available ? 'Preis verfügbar' : 'Kein Preis verfügbar';
+            const displayPrice = price.available ? formatPrice(price.unitPrice) : 'Kein Preis';
+
+            cards += `
+                <div class="price-card">
+                    <div class="price-card-top">
+                        <div class="vendor">
+                            <a class="vendor-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
+                                ${escapeHtml(price.vendorName ?? '')}
+                            </a>
+                        </div>
+                        <div class="${price.available ? 'price' : 'price-unavailable'}">${displayPrice}</div>
+                    </div>
+
+                    <div class="muted">
+                        Einzelpreis und Gesamtpreise für Mengenstaffeln.
+                    </div>
+
+                    <div class="${availableClass}">${availableText}</div>
+
+                    <div class="tier-grid">
+                        <div class="tier-box">
+                            <div class="tier-label">1 Stk</div>
+                            <div class="tier-value">${formatPrice(price.unitPrice)}</div>
+                        </div>
+                        <div class="tier-box">
+                            <div class="tier-label">10 Stk Gesamt</div>
+                            <div class="tier-value">${formatPrice(price.price10)}</div>
+                        </div>
+                        <div class="tier-box">
+                            <div class="tier-label">100 Stk Gesamt</div>
+                            <div class="tier-value">${formatPrice(price.price100)}</div>
+                        </div>
+                        <div class="tier-box">
+                            <div class="tier-label">1000 Stk Gesamt</div>
+                            <div class="tier-value">${formatPrice(price.price1000)}</div>
+                        </div>
+                    </div>
+
+                    <div class="shop-link-wrap">
+                        <a class="shop-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
+                            Zum Anbieter
+                        </a>
+                    </div>
+                </div>
+            `;
+        });
+
+        cards += `</div>`;
+        priceResults.innerHTML = cards;
+    }
+
     function loadSuggestions() {
         const value = document.getElementById('partNumber').value.trim();
 
@@ -1018,6 +1203,8 @@
             tableSummary.textContent = 'Keine Eingabe';
             priceSummary.textContent = '0 Anbieter';
             setMetrics('Leer', 0, 0);
+            currentOnlinePrices = [];
+            currentPriceSortMode = 'default';
 
             results.innerHTML = `
                 <div class="empty-state">
@@ -1045,6 +1232,9 @@
                 const onlinePrices = result.onlinePrices || [];
                 const averageOnlinePrice = result.averageOnlinePrice || 0;
                 const message = result.message || 'Suche abgeschlossen';
+
+                currentOnlinePrices = onlinePrices;
+                currentPriceSortMode = 'default';
 
                 debug.textContent = message;
                 tableSummary.textContent = localParts.length + ' Treffer';
@@ -1109,74 +1299,7 @@
                     results.innerHTML = html;
                 }
 
-                if (onlinePrices.length === 0) {
-                    priceResults.innerHTML = `
-                        <div class="empty-state">
-                            Keine Online-Preise verfügbar.
-                        </div>
-                    `;
-                } else {
-                    let cards = `
-                        <div class="scroll-hint">
-                            Anbieter seitlich verschieben, um alle Preis-Karten anzusehen.
-                        </div>
-                        <div class="cards-scroll">
-                    `;
-
-                    onlinePrices.forEach(price => {
-                        const link = safeUrl(price.productUrl);
-                        const availableClass = price.available ? 'availability available' : 'availability not-available';
-                        const availableText = price.available ? 'Preis verfügbar' : 'Kein Preis verfügbar';
-                        const displayPrice = price.available ? formatPrice(price.unitPrice) : 'Kein Preis';
-
-                        cards += `
-                            <div class="price-card">
-                                <div class="price-card-top">
-                                    <div class="vendor">
-                                        <a class="vendor-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
-                                            ${escapeHtml(price.vendorName ?? '')}
-                                        </a>
-                                    </div>
-                                    <div class="${price.available ? 'price' : 'price-unavailable'}">${displayPrice}</div>
-                                </div>
-
-                                <div class="muted">
-                                    Einzelpreis und Gesamtpreise für Mengenstaffeln.
-                                </div>
-
-                                <div class="${availableClass}">${availableText}</div>
-
-                                <div class="tier-grid">
-                                    <div class="tier-box">
-                                        <div class="tier-label">1 Stk</div>
-                                        <div class="tier-value">${formatPrice(price.unitPrice)}</div>
-                                    </div>
-                                    <div class="tier-box">
-                                        <div class="tier-label">10 Stk Gesamt</div>
-                                        <div class="tier-value">${formatPrice(price.price10)}</div>
-                                    </div>
-                                    <div class="tier-box">
-                                        <div class="tier-label">100 Stk Gesamt</div>
-                                        <div class="tier-value">${formatPrice(price.price100)}</div>
-                                    </div>
-                                    <div class="tier-box">
-                                        <div class="tier-label">1000 Stk Gesamt</div>
-                                        <div class="tier-value">${formatPrice(price.price1000)}</div>
-                                    </div>
-                                </div>
-
-                                <div class="shop-link-wrap">
-                                    <a class="shop-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
-                                        Zum Anbieter
-                                    </a>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    cards += `</div>`;
-                    priceResults.innerHTML = cards;
-                }
+                renderOnlinePrices(currentOnlinePrices);
             })
             .catch(error => {
                 console.error('Fehler bei der Suche:', error);
@@ -1185,6 +1308,8 @@
                 tableSummary.textContent = 'Fehler';
                 priceSummary.textContent = 'Fehler';
                 setMetrics('Fehler', 0, 0);
+                currentOnlinePrices = [];
+                currentPriceSortMode = 'default';
 
                 results.innerHTML = `
                     <div class="empty-state">
