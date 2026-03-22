@@ -596,8 +596,8 @@
             white-space: nowrap;
         }
 
-        .highlight-best-stock td {
-            box-shadow: inset 4px 0 0 var(--success);
+        .highlight-best-stock {
+            border-left: 4px solid var(--success);
         }
 
         .horizontal-price-section {
@@ -985,6 +985,8 @@
     let currentLocalSortMode = 'default';
     let currentLocalFilterMode = 'all';
 
+    let stockSortDirection = null; // null | 'asc' | 'desc'
+
     function fillAndSearch(value) {
         document.getElementById('partNumber').value = value;
         hideSuggestions();
@@ -1158,6 +1160,18 @@
     function sortLocalParts(parts) {
         const sorted = [...parts];
 
+        // 🔥 PRIORITÄT: Klick auf "Bestand"
+        if (stockSortDirection === 'asc') {
+            sorted.sort((a, b) => Number(a.stockQuantity ?? 0) - Number(b.stockQuantity ?? 0));
+            return sorted;
+        }
+
+        if (stockSortDirection === 'desc') {
+            sorted.sort((a, b) => Number(b.stockQuantity ?? 0) - Number(a.stockQuantity ?? 0));
+            return sorted;
+        }
+
+        // 🧠 FALLBACK: alte Dropdown Sortierung
         if (currentLocalSortMode === 'partAsc') {
             sorted.sort((a, b) => String(a.partNumber || '').localeCompare(String(b.partNumber || '')));
         } else if (currentLocalSortMode === 'stockDesc') {
@@ -1241,7 +1255,9 @@
                                 <th>Name</th>
                                 <th>Typ</th>
                                 <th>Bauart</th>
-                                <th>Bestand</th>
+                                <th onclick="toggleStockSort()" style="cursor:pointer;">
+                                    Bestand <span id="stockSortIndicator"></span>
+                                </th>
                                 <th>Einkauf</th>
                                 <th>1 Stk</th>
                                 <th>10 Stk</th>
@@ -1560,6 +1576,33 @@
             .finally(() => {
                 setLoadingState(false);
             });
+    }
+
+    function toggleStockSort() {
+        if (stockSortDirection === null) {
+            stockSortDirection = 'desc';
+        } else if (stockSortDirection === 'desc') {
+            stockSortDirection = 'asc';
+        } else {
+            stockSortDirection = 'desc';
+        }
+
+        updateStockSortIndicator();
+        renderLocalParts(currentLocalParts);
+    }
+
+    function updateStockSortIndicator() {
+        const el = document.getElementById('stockSortIndicator');
+
+        if (!el) return;
+
+        if (stockSortDirection === 'asc') {
+            el.textContent = ' ▲';
+        } else if (stockSortDirection === 'desc') {
+            el.textContent = ' ▼';
+        } else {
+            el.textContent = '';
+        }
     }
 
     document.getElementById('partNumber').addEventListener('input', function () {
