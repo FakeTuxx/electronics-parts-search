@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSG Electronic - Bauteilsuche</title>
-
     <link rel="icon" href="/favicon.png" type="image/png">
-
     <style>
         :root {
-            --rsg-blue: #1c39bb;         /* Persischblau */
+            --rsg-blue: #1c39bb;
             --rsg-blue-dark: #142f9b;
             --rsg-blue-deep: #10257d;
             --rsg-blue-soft: #e9efff;
@@ -142,11 +140,109 @@
             line-height: 1.7;
         }
 
+        .hero-right {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 14px;
+            min-width: 360px;
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .user-panel {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 16px;
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+
+        .user-panel-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .user-panel-label {
+            font-size: 12px;
+            color: rgba(230, 236, 243, 0.78);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: bold;
+        }
+
+        .user-role-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: #ffffff;
+        }
+
+        .user-fullname {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .user-username {
+            font-size: 13px;
+            color: rgba(230, 236, 243, 0.78);
+            margin-bottom: 14px;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .hero-action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.14);
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .hero-action-btn.primary {
+            background: rgba(255,255,255,0.14);
+            color: #ffffff;
+        }
+
+        .hero-action-btn.primary:hover {
+            background: rgba(255,255,255,0.20);
+        }
+
+        .hero-action-btn.secondary {
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.92);
+        }
+
+        .hero-action-btn.secondary:hover {
+            background: rgba(255,255,255,0.14);
+        }
+
         .hero-stats {
             display: grid;
-            grid-template-columns: repeat(3, minmax(125px, 1fr));
+            grid-template-columns: repeat(3, minmax(95px, 1fr));
             gap: 12px;
-            min-width: 360px;
         }
 
         .stat-card {
@@ -780,6 +876,14 @@
             }
         }
 
+        @media (max-width: 1000px) {
+            .hero-right {
+                min-width: unset;
+                max-width: none;
+                width: 100%;
+            }
+        }
+
         @media (max-width: 900px) {
             .hero-stats {
                 grid-template-columns: 1fr;
@@ -848,6 +952,14 @@
                 letter-spacing: 4px;
                 font-size: 15px;
             }
+
+            .user-actions {
+                flex-direction: column;
+            }
+
+            .hero-action-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -869,18 +981,39 @@
                 </div>
             </div>
 
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="heroVendorCount">18</div>
-                    <div class="stat-label">Online Vendors</div>
+            <div class="hero-right">
+                <div class="user-panel">
+                    <div class="user-panel-top">
+                        <div class="user-panel-label">Aktive Sitzung</div>
+                        <div class="user-role-badge" id="userRoleBadge">USER</div>
+                    </div>
+
+                    <div class="user-fullname" id="userFullName">Lade Benutzer...</div>
+                    <div class="user-username" id="userUsername">@...</div>
+
+                    <div class="user-actions">
+                        <a href="/admin/users" class="hero-action-btn primary" id="adminButton" style="display:none;">
+                            Benutzerverwaltung
+                        </a>
+                        <a href="/logout" class="hero-action-btn secondary">
+                            Abmelden
+                        </a>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="heroSearchMode">Live</div>
-                    <div class="stat-label">Search & Suggestions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="heroStatus">Ready</div>
-                    <div class="stat-label">System Status</div>
+
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="heroVendorCount">18</div>
+                        <div class="stat-label">Online Vendors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="heroSearchMode">Live</div>
+                        <div class="stat-label">Search & Suggestions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="heroStatus">Ready</div>
+                        <div class="stat-label">System Status</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -988,7 +1121,29 @@
     let currentLocalSortMode = 'default';
     let currentLocalFilterMode = 'all';
 
-    let stockSortDirection = null; // null | 'asc' | 'desc'
+    let stockSortDirection = null;
+
+    async function loadCurrentUser() {
+        try {
+            const response = await fetch('/api/auth/me');
+
+            if (!response.ok) {
+                return;
+            }
+
+            const user = await response.json();
+
+            document.getElementById('userFullName').textContent = user.fullName || user.username || 'Benutzer';
+            document.getElementById('userUsername').textContent = '@' + (user.username || '');
+            document.getElementById('userRoleBadge').textContent = user.role || 'USER';
+
+            if (user.role === 'ADMIN') {
+                document.getElementById('adminButton').style.display = 'inline-flex';
+            }
+        } catch (error) {
+            console.error('Fehler beim Laden des aktuellen Benutzers:', error);
+        }
+    }
 
     function fillAndSearch(value) {
         document.getElementById('partNumber').value = value;
@@ -1163,7 +1318,6 @@
     function sortLocalParts(parts) {
         const sorted = [...parts];
 
-        // 🔥 PRIORITÄT: Klick auf "Bestand"
         if (stockSortDirection === 'asc') {
             sorted.sort((a, b) => Number(a.stockQuantity ?? 0) - Number(b.stockQuantity ?? 0));
             return sorted;
@@ -1174,7 +1328,6 @@
             return sorted;
         }
 
-        // 🧠 FALLBACK: alte Dropdown Sortierung
         if (currentLocalSortMode === 'partAsc') {
             sorted.sort((a, b) => String(a.partNumber || '').localeCompare(String(b.partNumber || '')));
         } else if (currentLocalSortMode === 'stockDesc') {
@@ -1299,6 +1452,7 @@
         `;
 
         results.innerHTML = html;
+        updateStockSortIndicator();
     }
 
     function sortOnlinePrices(prices, mode) {
@@ -1626,6 +1780,8 @@
             hideSuggestions();
         }
     });
+
+    loadCurrentUser();
 </script>
 </body>
 </html>

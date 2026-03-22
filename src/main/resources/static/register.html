@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSG Electronic - Registrierung</title>
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <style>
+        :root {
+            --rsg-blue: #1c39bb;
+            --rsg-blue-dark: #142f9b;
+            --rsg-blue-deep: #10257d;
+            --bg-main: #eef3f8;
+            --bg-panel: rgba(255, 255, 255, 0.96);
+            --text-main: #1f2f44;
+            --text-soft: #5f6f82;
+            --border-soft: #d9e2ec;
+            --shadow-strong: 0 24px 60px rgba(16, 37, 125, 0.18);
+            --success: #1f8a4d;
+            --danger: #c53b3b;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text-main);
+            background:
+                    radial-gradient(circle at top left, rgba(28, 57, 187, 0.10), transparent 24%),
+                    radial-gradient(circle at top right, rgba(77, 100, 209, 0.14), transparent 22%),
+                    linear-gradient(180deg, #f7f9fc 0%, #eef3f8 48%, #e7edf5 100%);
+            min-height: 100vh;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 640px;
+            background: var(--bg-panel);
+            border-radius: 28px;
+            box-shadow: var(--shadow-strong);
+            padding: 36px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(28,57,187,0.08);
+            border: 1px solid rgba(28,57,187,0.12);
+            color: var(--rsg-blue-dark);
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.9px;
+        }
+
+        h1 {
+            margin: 18px 0 8px;
+            font-size: 34px;
+            color: var(--rsg-blue-deep);
+        }
+
+        .subtext {
+            margin: 0 0 24px;
+            color: var(--text-soft);
+            line-height: 1.6;
+        }
+
+        .alert {
+            display: none;
+            margin-bottom: 18px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .alert.error {
+            background: rgba(197,59,59,0.10);
+            color: var(--danger);
+            border: 1px solid rgba(197,59,59,0.18);
+        }
+
+        .alert.success {
+            background: rgba(31,138,77,0.10);
+            color: var(--success);
+            border: 1px solid rgba(31,138,77,0.18);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--text-soft);
+        }
+
+        .field input {
+            width: 100%;
+            height: 56px;
+            border-radius: 16px;
+            border: 1px solid var(--border-soft);
+            background: white;
+            padding: 0 16px;
+            font-size: 15px;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .field input:focus {
+            border-color: rgba(28, 57, 187, 0.55);
+            box-shadow: 0 0 0 4px rgba(28, 57, 187, 0.12);
+        }
+
+        .register-btn {
+            width: 100%;
+            height: 58px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--rsg-blue), var(--rsg-blue-dark));
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 12px 26px rgba(20, 47, 155, 0.26);
+            margin-top: 8px;
+        }
+
+        .bottom-links {
+            margin-top: 18px;
+            font-size: 14px;
+            color: var(--text-soft);
+            text-align: center;
+        }
+
+        .bottom-links a {
+            color: var(--rsg-blue);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .bottom-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="card">
+        <div class="chip">RSG Electronic • Registrierung</div>
+        <h1>Neues Konto anlegen</h1>
+        <p class="subtext">
+            Nach der Registrierung wird dein Konto manuell durch den Administrator freigegeben.
+            Erst danach ist eine Anmeldung möglich.
+        </p>
+
+        <div id="errorBox" class="alert error"></div>
+        <div id="successBox" class="alert success"></div>
+
+        <form id="registerForm">
+            <div class="grid">
+                <div class="field full">
+                    <label for="fullName">Vollständiger Name</label>
+                    <input type="text" id="fullName" required>
+                </div>
+
+                <div class="field">
+                    <label for="username">Benutzername</label>
+                    <input type="text" id="username" required>
+                </div>
+
+                <div class="field">
+                    <label for="email">E-Mail</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="field full">
+                    <label for="password">Passwort</label>
+                    <input type="password" id="password" required>
+                </div>
+            </div>
+
+            <button class="register-btn" type="submit">Registrierung absenden</button>
+        </form>
+
+        <div class="bottom-links">
+            Bereits registriert?
+            <a href="/login">Zur Anmeldung</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('registerForm');
+    const errorBox = document.getElementById('errorBox');
+    const successBox = document.getElementById('successBox');
+
+    function showError(message) {
+        errorBox.textContent = message;
+        errorBox.style.display = 'block';
+        successBox.style.display = 'none';
+    }
+
+    function showSuccess(message) {
+        successBox.textContent = message;
+        successBox.style.display = 'block';
+        errorBox.style.display = 'none';
+    }
+
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const payload = {
+            fullName: document.getElementById('fullName').value.trim(),
+            username: document.getElementById('username').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            password: document.getElementById('password').value.trim()
+        };
+
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                showError(data.message || 'Registrierung fehlgeschlagen.');
+                return;
+            }
+
+            form.reset();
+            showSuccess(data.message || 'Registrierung erfolgreich.');
+        } catch (error) {
+            showError('Technischer Fehler bei der Registrierung.');
+        }
+    });
+</script>
+</body>
+</html>
