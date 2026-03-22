@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSG Elektronik - Bauteilsuche</title>
+    <title>RSG Electronic - Bauteilsuche</title>
     <style>
         :root {
-            --rsg-blue: #3f5f8c;
-            --rsg-blue-dark: #2f4c75;
-            --rsg-blue-deep: #203754;
-            --rsg-blue-light: #6f89ac;
-            --rsg-silver: #aab4c0;
+            --rsg-blue: #1c39bb;         /* Persischblau */
+            --rsg-blue-dark: #142f9b;
+            --rsg-blue-deep: #10257d;
+            --rsg-blue-soft: #e9efff;
+            --rsg-blue-light: #4d64d1;
             --rsg-silver-soft: #d8dee6;
             --bg-main: #eef3f8;
             --bg-panel: rgba(255, 255, 255, 0.94);
@@ -21,11 +21,13 @@
             --success-soft: rgba(31, 138, 77, 0.10);
             --warning: #c56a18;
             --warning-soft: rgba(197, 106, 24, 0.12);
+            --danger: #c53b3b;
+            --danger-soft: rgba(197, 59, 59, 0.10);
             --border-soft: #d9e2ec;
-            --shadow-soft: 0 14px 34px rgba(32, 55, 84, 0.10);
-            --shadow-strong: 0 24px 60px rgba(32, 55, 84, 0.18);
-            --link: #315d97;
-            --link-hover: #24466f;
+            --shadow-soft: 0 14px 34px rgba(16, 37, 125, 0.10);
+            --shadow-strong: 0 24px 60px rgba(16, 37, 125, 0.18);
+            --link: #1c39bb;
+            --link-hover: #142f9b;
         }
 
         * {
@@ -38,8 +40,8 @@
             font-family: Arial, Helvetica, sans-serif;
             color: var(--text-main);
             background:
-                    radial-gradient(circle at top left, rgba(63, 95, 140, 0.12), transparent 24%),
-                    radial-gradient(circle at top right, rgba(111, 137, 172, 0.16), transparent 22%),
+                    radial-gradient(circle at top left, rgba(28, 57, 187, 0.10), transparent 24%),
+                    radial-gradient(circle at top right, rgba(77, 100, 209, 0.14), transparent 22%),
                     linear-gradient(180deg, #f7f9fc 0%, #eef3f8 48%, #e7edf5 100%);
             min-height: 100vh;
         }
@@ -52,11 +54,11 @@
 
         .hero {
             position: relative;
-            overflow: visible;
-            background: linear-gradient(135deg, rgba(32, 55, 84, 0.96), rgba(47, 76, 117, 0.94));
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(16, 37, 125, 0.96), rgba(28, 57, 187, 0.92));
             border-radius: 30px;
             box-shadow: var(--shadow-strong);
-            padding: 30px 30px 24px;
+            padding: 32px 30px 26px;
             border: 1px solid rgba(255,255,255,0.08);
         }
 
@@ -66,8 +68,9 @@
             inset: 0;
             border-radius: 30px;
             background:
-                    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.10), transparent 18%),
-                    radial-gradient(circle at 86% 24%, rgba(255,255,255,0.08), transparent 16%);
+                    radial-gradient(circle at 14% 18%, rgba(255,255,255,0.10), transparent 18%),
+                    radial-gradient(circle at 85% 22%, rgba(255,255,255,0.08), transparent 18%),
+                    linear-gradient(90deg, rgba(255,255,255,0.04), transparent 40%);
             pointer-events: none;
         }
 
@@ -75,7 +78,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 20px;
+            gap: 22px;
             flex-wrap: wrap;
             position: relative;
             z-index: 2;
@@ -84,48 +87,8 @@
         .brand-block {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-        }
-
-        .brand-row {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            flex-wrap: wrap;
-        }
-
-        .logo-shell {
-            width: 110px;
-            height: 78px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
-            border: 1px solid rgba(255,255,255,0.14);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-        }
-
-        .logo-shell svg {
-            width: 84px;
-            height: 52px;
-            display: block;
-        }
-
-        .brand-text h1 {
-            margin: 0;
-            font-size: 40px;
-            line-height: 1;
-            letter-spacing: -1px;
-            color: #ffffff;
-        }
-
-        .brand-text .subline {
-            margin-top: 4px;
-            font-size: 18px;
-            letter-spacing: 6px;
-            color: rgba(216, 222, 230, 0.92);
-            text-transform: uppercase;
+            gap: 12px;
+            max-width: 820px;
         }
 
         .brand-chip {
@@ -141,22 +104,46 @@
             font-size: 12px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.9px;
+        }
+
+        .brand-text-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 110px;
+        }
+
+        .brand-text-only h1 {
+            margin: 0;
+            font-size: 64px;
+            line-height: 0.9;
+            letter-spacing: -2px;
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .brand-text-only .subline {
+            margin-top: 10px;
+            font-size: 20px;
+            letter-spacing: 8px;
+            color: rgba(255,255,255,0.90);
+            text-transform: uppercase;
         }
 
         .hero-copy {
             max-width: 760px;
             margin-top: 8px;
-            color: rgba(230, 236, 243, 0.88);
+            color: rgba(230, 236, 243, 0.90);
             font-size: 15px;
-            line-height: 1.65;
+            line-height: 1.7;
         }
 
         .hero-stats {
             display: grid;
-            grid-template-columns: repeat(3, minmax(120px, 1fr));
+            grid-template-columns: repeat(3, minmax(125px, 1fr));
             gap: 12px;
-            min-width: 340px;
+            min-width: 360px;
         }
 
         .stat-card {
@@ -182,7 +169,7 @@
         .search-card {
             margin-top: 24px;
             position: relative;
-            z-index: 30;
+            z-index: 3;
             background: var(--bg-panel-strong);
             border-radius: 24px;
             border: 1px solid rgba(255,255,255,0.35);
@@ -208,7 +195,7 @@
 
         .input-wrap input {
             width: 100%;
-            height: 62px;
+            height: 64px;
             border-radius: 18px;
             border: 1px solid var(--border-soft);
             background: #ffffff;
@@ -220,8 +207,8 @@
         }
 
         .input-wrap input:focus {
-            border-color: rgba(63, 95, 140, 0.55);
-            box-shadow: 0 0 0 4px rgba(63, 95, 140, 0.12);
+            border-color: rgba(28, 57, 187, 0.55);
+            box-shadow: 0 0 0 4px rgba(28, 57, 187, 0.12);
         }
 
         .input-wrap .icon {
@@ -231,12 +218,12 @@
             transform: translateY(-50%);
             font-size: 20px;
             color: var(--rsg-blue);
-            opacity: 0.8;
+            opacity: 0.85;
         }
 
         .search-btn {
-            height: 62px;
-            min-width: 180px;
+            height: 64px;
+            min-width: 190px;
             border: none;
             border-radius: 18px;
             background: linear-gradient(135deg, var(--rsg-blue), var(--rsg-blue-dark));
@@ -244,13 +231,18 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 12px 26px rgba(47, 76, 117, 0.26);
-            transition: transform 0.15s ease, filter 0.15s ease;
+            box-shadow: 0 12px 26px rgba(20, 47, 155, 0.26);
+            transition: transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
         }
 
-        .search-btn:hover {
+        .search-btn:hover:not(:disabled) {
             filter: brightness(1.03);
             transform: translateY(-1px);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.78;
+            cursor: wait;
         }
 
         .chips {
@@ -279,7 +271,7 @@
 
         .suggestions {
             position: absolute;
-            top: 70px;
+            top: 72px;
             left: 0;
             right: 0;
             display: none;
@@ -287,7 +279,7 @@
             background: #ffffff;
             border: 1px solid var(--border-soft);
             border-radius: 18px;
-            box-shadow: 0 20px 44px rgba(32, 55, 84, 0.18);
+            box-shadow: 0 20px 44px rgba(16, 37, 125, 0.18);
             overflow-y: auto;
             max-height: 320px;
         }
@@ -325,7 +317,7 @@
             font-size: 12px;
             font-weight: bold;
             color: var(--rsg-blue-dark);
-            background: rgba(63, 95, 140, 0.10);
+            background: rgba(28, 57, 187, 0.10);
             padding: 4px 8px;
             border-radius: 999px;
             white-space: nowrap;
@@ -338,7 +330,7 @@
 
         .metrics {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 14px;
             margin-top: 22px;
         }
@@ -390,7 +382,7 @@
             align-items: center;
             gap: 14px;
             padding: 22px 24px 14px;
-            border-bottom: 1px solid rgba(32, 55, 84, 0.06);
+            border-bottom: 1px solid rgba(16, 37, 125, 0.06);
             background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.45));
         }
 
@@ -408,13 +400,13 @@
 
         .summary-pill {
             white-space: nowrap;
-            background: rgba(63, 95, 140, 0.10);
+            background: rgba(28, 57, 187, 0.10);
             color: var(--rsg-blue-dark);
             padding: 10px 14px;
             border-radius: 999px;
             font-weight: bold;
             font-size: 13px;
-            border: 1px solid rgba(63, 95, 140, 0.14);
+            border: 1px solid rgba(28, 57, 187, 0.14);
         }
 
         .debug-box {
@@ -432,6 +424,53 @@
             padding: 18px 24px 24px;
         }
 
+        .table-tools,
+        .price-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tool-label {
+            font-size: 13px;
+            color: var(--text-soft);
+            font-weight: bold;
+        }
+
+        .tool-select {
+            min-width: 200px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid #d7dfeb;
+            background: #ffffff;
+            color: var(--rsg-blue-deep);
+            padding: 0 12px;
+            font-size: 14px;
+            font-weight: bold;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .tool-select:focus {
+            border-color: rgba(28, 57, 187, 0.55);
+            box-shadow: 0 0 0 4px rgba(28, 57, 187, 0.12);
+        }
+
+        .tool-note {
+            font-size: 13px;
+            color: var(--text-soft);
+        }
+
         .table-scroll-hint {
             font-size: 13px;
             color: var(--text-soft);
@@ -446,7 +485,7 @@
         }
 
         .table-scroll {
-            max-height: 420px;
+            max-height: 460px;
             overflow-y: auto;
             overflow-x: auto;
         }
@@ -456,12 +495,14 @@
             height: 12px;
         }
 
-        .table-scroll::-webkit-scrollbar-track {
+        .table-scroll::-webkit-scrollbar-track,
+        .cards-scroll::-webkit-scrollbar-track {
             background: #dde6f0;
             border-radius: 999px;
         }
 
-        .table-scroll::-webkit-scrollbar-thumb {
+        .table-scroll::-webkit-scrollbar-thumb,
+        .cards-scroll::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, var(--rsg-blue), var(--rsg-blue-dark));
             border-radius: 999px;
         }
@@ -514,19 +555,19 @@
         }
 
         .tag-type {
-            background: rgba(63, 95, 140, 0.10);
+            background: rgba(28, 57, 187, 0.10);
             color: var(--rsg-blue-dark);
         }
 
         .tag-mount {
-            background: rgba(111, 137, 172, 0.14);
+            background: rgba(77, 100, 209, 0.14);
             color: var(--rsg-blue-deep);
         }
 
         .stock-badge {
             display: inline-flex;
             justify-content: center;
-            min-width: 44px;
+            min-width: 58px;
             padding: 6px 10px;
             border-radius: 999px;
             font-weight: bold;
@@ -537,6 +578,11 @@
         .stock-low {
             background: #fff5ea;
             color: var(--warning);
+        }
+
+        .stock-zero {
+            background: #fdeeee;
+            color: var(--danger);
         }
 
         .price-good {
@@ -550,54 +596,12 @@
             white-space: nowrap;
         }
 
+        .highlight-best-stock td {
+            box-shadow: inset 4px 0 0 var(--success);
+        }
+
         .horizontal-price-section {
             padding: 18px 24px 28px;
-        }
-
-        .price-tools {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
-            margin-bottom: 14px;
-        }
-
-        .scroll-hint {
-            font-size: 13px;
-            color: var(--text-soft);
-            margin-bottom: 0;
-        }
-
-        .sort-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sort-label {
-            font-size: 13px;
-            color: var(--text-soft);
-            font-weight: bold;
-        }
-
-        .sort-select {
-            min-width: 220px;
-            height: 42px;
-            border-radius: 12px;
-            border: 1px solid #d7dfeb;
-            background: #ffffff;
-            color: var(--rsg-blue-deep);
-            padding: 0 12px;
-            font-size: 14px;
-            font-weight: bold;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .sort-select:focus {
-            border-color: rgba(63, 95, 140, 0.55);
-            box-shadow: 0 0 0 4px rgba(63, 95, 140, 0.12);
         }
 
         .cards-scroll {
@@ -613,24 +617,33 @@
             height: 12px;
         }
 
-        .cards-scroll::-webkit-scrollbar-track {
-            background: #dde6f0;
-            border-radius: 999px;
-        }
-
-        .cards-scroll::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--rsg-blue), var(--rsg-blue-dark));
-            border-radius: 999px;
-        }
-
         .price-card {
-            flex: 0 0 320px;
-            min-width: 320px;
+            position: relative;
+            flex: 0 0 330px;
+            min-width: 330px;
             background: linear-gradient(135deg, #ffffff, #f7f9fc);
             border: 1px solid #dce5ef;
             border-radius: 22px;
             padding: 18px;
-            box-shadow: 0 8px 20px rgba(32, 55, 84, 0.05);
+            box-shadow: 0 8px 20px rgba(16, 37, 125, 0.05);
+        }
+
+        .price-card.cheapest {
+            border-color: rgba(31, 138, 77, 0.38);
+            box-shadow: 0 10px 26px rgba(31, 138, 77, 0.12);
+        }
+
+        .top-badge {
+            display: inline-block;
+            margin-bottom: 10px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--success-soft);
+            color: var(--success);
         }
 
         .price-card-top {
@@ -730,16 +743,16 @@
             display: inline-block;
             padding: 10px 14px;
             border-radius: 12px;
-            background: rgba(63, 95, 140, 0.10);
+            background: rgba(28, 57, 187, 0.10);
             color: var(--rsg-blue-dark);
             text-decoration: none;
             font-weight: bold;
             font-size: 13px;
-            border: 1px solid rgba(63, 95, 140, 0.12);
+            border: 1px solid rgba(28, 57, 187, 0.12);
         }
 
         .shop-link:hover {
-            background: rgba(63, 95, 140, 0.16);
+            background: rgba(28, 57, 187, 0.16);
         }
 
         .empty-state {
@@ -758,14 +771,17 @@
             font-size: 13px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1050px) {
             .metrics {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
+        }
 
+        @media (max-width: 900px) {
             .hero-stats {
                 grid-template-columns: 1fr;
                 min-width: unset;
+                width: 100%;
             }
 
             .search-row {
@@ -776,33 +792,30 @@
                 width: 100%;
             }
 
-            .brand-text h1 {
-                font-size: 30px;
+            .brand-text-only h1 {
+                font-size: 48px;
             }
 
-            .brand-text .subline {
-                font-size: 15px;
-                letter-spacing: 4px;
+            .brand-text-only .subline {
+                font-size: 16px;
+                letter-spacing: 5px;
             }
 
             .price-card {
-                flex: 0 0 280px;
-                min-width: 280px;
+                flex: 0 0 290px;
+                min-width: 290px;
             }
 
-            .price-tools {
+            .table-tools,
+            .price-tools,
+            .tool-group {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            .sort-wrap {
+            .tool-select {
                 width: 100%;
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .sort-select {
-                width: 100%;
+                min-width: unset;
             }
         }
 
@@ -815,9 +828,22 @@
                 padding: 22px 18px 18px;
             }
 
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
             .price-card {
                 flex: 0 0 260px;
                 min-width: 260px;
+            }
+
+            .brand-text-only h1 {
+                font-size: 40px;
+            }
+
+            .brand-text-only .subline {
+                letter-spacing: 4px;
+                font-size: 15px;
             }
         }
     </style>
@@ -827,43 +853,31 @@
     <section class="hero">
         <div class="topbar">
             <div class="brand-block">
-                <div class="brand-chip">RSG Elektronik • Lager & Online Preisvergleich</div>
+                <div class="brand-chip">RSG Electronic • Inventory & Online Price Comparison</div>
 
-                <div class="brand-row">
-                    <div class="logo-shell" aria-label="RSG Elektronik Logo">
-                        <svg viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg">
-                            <polygon points="10,20 88,20 108,34 74,34 74,94 46,118 46,48 10,48" fill="#5f7ea8"/>
-                            <path d="M92 20 L162 20 C182 20 194 28 194 42 C194 56 184 63 168 67 L194 100 L162 100 L138 71 L120 71 L120 100 L92 100 Z" fill="#5f7ea8"/>
-                            <path d="M112 45 L155 45 C161 45 166 42 166 36 C166 31 161 28 155 28 L112 28 Z" fill="#ffffff" opacity="0.10"/>
-                            <path d="M202 20 L142 20 L120 44 L178 44 C184 44 188 46 188 50 C188 54 184 56 178 56 L152 56 C132 56 118 66 118 80 C118 95 130 100 150 100 L210 100 L210 76 L154 76 C148 76 144 74 144 70 C144 66 148 64 154 64 L180 64 C200 64 214 56 214 40 C214 28 206 20 202 20 Z" fill="#5f7ea8"/>
-                        </svg>
-                    </div>
-
-                    <div class="brand-text">
-                        <h1>RSG</h1>
-                        <div class="subline">Elektronik</div>
-                    </div>
+                <div class="brand-text-only">
+                    <h1>RSG</h1>
+                    <div class="subline">ELECTRONIC</div>
                 </div>
 
                 <div class="hero-copy">
-                    Moderne Bauteilsuche für Lagerteile und externe Anbieter.
-                    Suche nach Part Number, Name oder Typ, prüfe Lagerbestand
-                    und vergleiche Einzel- und Staffelpreise übersichtlich in einem Schritt.
+                    Moderne Bauteilsuche für Lagerteile und externe Anbieter. Suche nach Part Number, Name oder Typ,
+                    prüfe Lagerbestand, filtere Treffer gezielt und vergleiche Einzel- und Staffelpreise professionell in einem Schritt.
                 </div>
             </div>
 
             <div class="hero-stats">
                 <div class="stat-card">
-                    <div class="stat-value">RSG</div>
-                    <div class="stat-label">Branding integriert</div>
+                    <div class="stat-value" id="heroVendorCount">18</div>
+                    <div class="stat-label">Online Vendors</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">18</div>
-                    <div class="stat-label">Online Anbieter</div>
+                    <div class="stat-value" id="heroSearchMode">Live</div>
+                    <div class="stat-label">Search & Suggestions</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">Live</div>
-                    <div class="stat-label">Suche mit Vorschlägen</div>
+                    <div class="stat-value" id="heroStatus">Ready</div>
+                    <div class="stat-label">System Status</div>
                 </div>
             </div>
         </div>
@@ -883,7 +897,7 @@
                     <div class="suggestions" id="suggestions"></div>
                 </div>
 
-                <button class="search-btn" onclick="searchParts()">Bauteil suchen</button>
+                <button class="search-btn" id="searchBtn" onclick="searchParts()">Bauteil suchen</button>
             </div>
 
             <div class="chips">
@@ -901,17 +915,22 @@
         <div class="metric">
             <div class="metric-label">Suchstatus</div>
             <div class="metric-value" id="metricStatus">Bereit</div>
-            <div class="metric-note">RSG Elektronik Suchsystem ist startklar</div>
+            <div class="metric-note">RSG Electronic Suchsystem ist startklar</div>
         </div>
         <div class="metric">
-            <div class="metric-label">Treffer</div>
+            <div class="metric-label">Lagerteile</div>
             <div class="metric-value" id="metricCount">0</div>
-            <div class="metric-note">Gefundene Lagerteile</div>
+            <div class="metric-note">Gefundene interne Treffer</div>
         </div>
         <div class="metric">
             <div class="metric-label">Online Durchschnitt</div>
             <div class="metric-value" id="metricAverage">EUR 0.000</div>
             <div class="metric-note">Gemittelter Einzelpreis über Anbieter</div>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Günstigster Onlinepreis</div>
+            <div class="metric-value" id="metricLowestPrice">-</div>
+            <div class="metric-note">Bester aktuell gefundener Einzelpreis</div>
         </div>
     </section>
 
@@ -938,7 +957,7 @@
             <div class="panel-header">
                 <div>
                     <h2 class="panel-title">Online Preisvergleich</h2>
-                    <p class="panel-subtitle">Seitlich scrollbare Anbieteransicht mit Preis-Sortierung</p>
+                    <p class="panel-subtitle">Seitlich scrollbare Anbieteransicht mit Sortierung und Filtern</p>
                 </div>
                 <div class="summary-pill" id="priceSummary">0 Anbieter</div>
             </div>
@@ -952,7 +971,7 @@
     </section>
 
     <div class="footer-note">
-        RSG Elektronik • Bauteilsuche • Lagerdaten • Online Preisvergleich
+        RSG Electronic • Bauteilsuche • Lagerdaten • Online Preisvergleich
     </div>
 </div>
 
@@ -960,6 +979,11 @@
     let suggestionTimeout = null;
     let currentOnlinePrices = [];
     let currentPriceSortMode = 'default';
+    let currentPriceFilterMode = 'all';
+
+    let currentLocalParts = [];
+    let currentLocalSortMode = 'default';
+    let currentLocalFilterMode = 'all';
 
     function fillAndSearch(value) {
         document.getElementById('partNumber').value = value;
@@ -971,17 +995,55 @@
         if (value === null || value === undefined || isNaN(Number(value))) {
             return '-';
         }
-        return 'EUR ' + Number(value).toFixed(3);
+
+        return new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(Number(value));
+    }
+
+    function formatPlainPrice(value) {
+        if (value === null || value === undefined || isNaN(Number(value))) {
+            return '-';
+        }
+        return Number(value).toFixed(3);
     }
 
     function getStockBadgeClass(stock) {
-        return stock < 50 ? 'stock-badge stock-low' : 'stock-badge';
+        if ((stock ?? 0) <= 0) {
+            return 'stock-badge stock-zero';
+        }
+        if ((stock ?? 0) < 50) {
+            return 'stock-badge stock-low';
+        }
+        return 'stock-badge';
     }
 
-    function setMetrics(status, count, average) {
+    function setMetrics(status, count, average, lowestPrice) {
         document.getElementById('metricStatus').textContent = status;
         document.getElementById('metricCount').textContent = count;
         document.getElementById('metricAverage').textContent = formatPrice(average);
+        document.getElementById('metricLowestPrice').textContent = lowestPrice !== null ? formatPrice(lowestPrice) : '-';
+        document.getElementById('heroStatus').textContent = status === 'Fehler' ? 'Error' : (status === 'Suche' ? 'Loading' : 'Ready');
+    }
+
+    function setLoadingState(isLoading) {
+        const btn = document.getElementById('searchBtn');
+        const input = document.getElementById('partNumber');
+
+        btn.disabled = isLoading;
+        input.disabled = isLoading;
+
+        if (isLoading) {
+            btn.textContent = 'Suche läuft...';
+            document.getElementById('heroSearchMode').textContent = 'Searching';
+        } else {
+            btn.textContent = 'Bauteil suchen';
+            document.getElementById('heroSearchMode').textContent = 'Live';
+            input.disabled = false;
+        }
     }
 
     function hideSuggestions() {
@@ -1051,36 +1113,216 @@
         return Number(price.unitPrice);
     }
 
-    function sortOnlinePrices(prices, mode) {
-        const sorted = [...prices];
+    function getLowestAvailablePrice(prices) {
+        const availablePrices = (prices || [])
+            .map(item => getSortablePriceValue(item))
+            .filter(value => isFinite(value));
 
-        if (mode === 'priceAsc') {
-            sorted.sort((a, b) => {
-                const aValue = getSortablePriceValue(a);
-                const bValue = getSortablePriceValue(b);
-                return aValue - bValue;
-            });
-        } else if (mode === 'priceDesc') {
-            sorted.sort((a, b) => {
-                const aValue = getSortablePriceValue(a);
-                const bValue = getSortablePriceValue(b);
-                return bValue - aValue;
-            });
+        if (availablePrices.length === 0) {
+            return null;
+        }
 
-            const unavailable = sorted.filter(item => !isFinite(getSortablePriceValue(item)));
-            const available = sorted.filter(item => isFinite(getSortablePriceValue(item)));
-            return [...available, ...unavailable];
+        return Math.min(...availablePrices);
+    }
+
+    function onLocalSortChange() {
+        const select = document.getElementById('localSortSelect');
+        if (!select) return;
+        currentLocalSortMode = select.value;
+        renderLocalParts(currentLocalParts);
+    }
+
+    function onLocalFilterChange() {
+        const select = document.getElementById('localFilterSelect');
+        if (!select) return;
+        currentLocalFilterMode = select.value;
+        renderLocalParts(currentLocalParts);
+    }
+
+    function filterLocalParts(parts) {
+        if (currentLocalFilterMode === 'stockAvailable') {
+            return parts.filter(part => Number(part.stockQuantity ?? 0) > 0);
+        }
+        if (currentLocalFilterMode === 'stockLow') {
+            return parts.filter(part => Number(part.stockQuantity ?? 0) > 0 && Number(part.stockQuantity ?? 0) < 50);
+        }
+        if (currentLocalFilterMode === 'mountSmd') {
+            return parts.filter(part => String(part.mountType || '').toLowerCase() === 'smd');
+        }
+        if (currentLocalFilterMode === 'mountTht') {
+            return parts.filter(part => String(part.mountType || '').toLowerCase() === 'tht');
+        }
+        return parts;
+    }
+
+    function sortLocalParts(parts) {
+        const sorted = [...parts];
+
+        if (currentLocalSortMode === 'partAsc') {
+            sorted.sort((a, b) => String(a.partNumber || '').localeCompare(String(b.partNumber || '')));
+        } else if (currentLocalSortMode === 'stockDesc') {
+            sorted.sort((a, b) => Number(b.stockQuantity ?? 0) - Number(a.stockQuantity ?? 0));
+        } else if (currentLocalSortMode === 'stockAsc') {
+            sorted.sort((a, b) => Number(a.stockQuantity ?? 0) - Number(b.stockQuantity ?? 0));
+        } else if (currentLocalSortMode === 'priceAsc') {
+            sorted.sort((a, b) => Number(a.purchasePriceEur ?? 0) - Number(b.purchasePriceEur ?? 0));
+        } else if (currentLocalSortMode === 'priceDesc') {
+            sorted.sort((a, b) => Number(b.purchasePriceEur ?? 0) - Number(a.purchasePriceEur ?? 0));
         }
 
         return sorted;
     }
 
-    function onPriceSortChange() {
-        const select = document.getElementById('priceSortSelect');
-        if (!select) {
+    function renderLocalParts(parts) {
+        const results = document.getElementById('results');
+
+        if (!parts || parts.length === 0) {
+            results.innerHTML = `
+                <div class="empty-state">
+                    Keine passenden Lagerteile gefunden. Versuch es mit 1N4148, ATMEGA, LM358, resistor, capacitor oder transistor.
+                </div>
+            `;
             return;
         }
+
+        const filtered = filterLocalParts(parts);
+        const sorted = sortLocalParts(filtered);
+        const bestStockValue = sorted.length > 0 ? Math.max(...sorted.map(part => Number(part.stockQuantity ?? 0))) : null;
+
+        if (sorted.length === 0) {
+            results.innerHTML = `
+                <div class="empty-state">
+                    Für den gewählten Lager-Filter gibt es aktuell keine Treffer.
+                </div>
+            `;
+            return;
+        }
+
+        let html = `
+            <div class="table-tools">
+                <div class="tool-group">
+                    <span class="tool-label">Sortierung</span>
+                    <select class="tool-select" id="localSortSelect" onchange="onLocalSortChange()">
+                        <option value="default" ${currentLocalSortMode === 'default' ? 'selected' : ''}>Standard</option>
+                        <option value="partAsc" ${currentLocalSortMode === 'partAsc' ? 'selected' : ''}>Part Number A-Z</option>
+                        <option value="stockDesc" ${currentLocalSortMode === 'stockDesc' ? 'selected' : ''}>Bestand absteigend</option>
+                        <option value="stockAsc" ${currentLocalSortMode === 'stockAsc' ? 'selected' : ''}>Bestand aufsteigend</option>
+                        <option value="priceAsc" ${currentLocalSortMode === 'priceAsc' ? 'selected' : ''}>Einkaufspreis aufsteigend</option>
+                        <option value="priceDesc" ${currentLocalSortMode === 'priceDesc' ? 'selected' : ''}>Einkaufspreis absteigend</option>
+                    </select>
+                </div>
+
+                <div class="tool-group">
+                    <span class="tool-label">Filter</span>
+                    <select class="tool-select" id="localFilterSelect" onchange="onLocalFilterChange()">
+                        <option value="all" ${currentLocalFilterMode === 'all' ? 'selected' : ''}>Alle Treffer</option>
+                        <option value="stockAvailable" ${currentLocalFilterMode === 'stockAvailable' ? 'selected' : ''}>Nur Bestand > 0</option>
+                        <option value="stockLow" ${currentLocalFilterMode === 'stockLow' ? 'selected' : ''}>Nur niedriger Bestand</option>
+                        <option value="mountSmd" ${currentLocalFilterMode === 'mountSmd' ? 'selected' : ''}>Nur SMD</option>
+                        <option value="mountTht" ${currentLocalFilterMode === 'mountTht' ? 'selected' : ''}>Nur THT</option>
+                    </select>
+                </div>
+
+                <div class="tool-note">
+                    Angezeigt: ${sorted.length} von ${parts.length} Lagerteilen
+                </div>
+            </div>
+
+            <div class="table-scroll-hint">
+                Lagerbestand vertikal scrollen, um viele Treffer durchzublättern. Die Spaltenüberschrift bleibt oben sichtbar.
+            </div>
+
+            <div class="table-wrap">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bauteilnummer</th>
+                                <th>Name</th>
+                                <th>Typ</th>
+                                <th>Bauart</th>
+                                <th>Bestand</th>
+                                <th>Einkauf</th>
+                                <th>1 Stk</th>
+                                <th>10 Stk</th>
+                                <th>100 Stk</th>
+                                <th>1000 Stk</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        sorted.forEach(part => {
+            const stockValue = Number(part.stockQuantity ?? 0);
+            const highlightClass = bestStockValue !== null && stockValue === bestStockValue && stockValue > 0 ? 'highlight-best-stock' : '';
+
+            html += `
+                <tr class="${highlightClass}">
+                    <td class="mono">${escapeHtml(part.partNumber ?? '')}</td>
+                    <td>${escapeHtml(part.name ?? '')}</td>
+                    <td><span class="tag tag-type">${escapeHtml(part.type ?? '')}</span></td>
+                    <td><span class="tag tag-mount">${escapeHtml(part.mountType ?? '')}</span></td>
+                    <td><span class="${getStockBadgeClass(stockValue)}">${stockValue}</span></td>
+                    <td class="price-good">${formatPrice(part.purchasePriceEur)}</td>
+                    <td class="tier-price">${formatPrice(part.price1Eur)}</td>
+                    <td class="tier-price">${formatPrice(part.price10Eur)}</td>
+                    <td class="tier-price">${formatPrice(part.price100Eur)}</td>
+                    <td class="tier-price">${formatPrice(part.price1000Eur)}</td>
+                </tr>
+            `;
+        });
+
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+
+        results.innerHTML = html;
+    }
+
+    function sortOnlinePrices(prices, mode) {
+        const sorted = [...prices];
+
+        if (mode === 'priceAsc') {
+            sorted.sort((a, b) => getSortablePriceValue(a) - getSortablePriceValue(b));
+        } else if (mode === 'priceDesc') {
+            sorted.sort((a, b) => getSortablePriceValue(b) - getSortablePriceValue(a));
+            const unavailable = sorted.filter(item => !isFinite(getSortablePriceValue(item)));
+            const available = sorted.filter(item => isFinite(getSortablePriceValue(item)));
+            return [...available, ...unavailable];
+        } else if (mode === 'vendorAsc') {
+            sorted.sort((a, b) => String(a.vendorName || '').localeCompare(String(b.vendorName || '')));
+        }
+
+        return sorted;
+    }
+
+    function filterOnlinePrices(prices) {
+        if (currentPriceFilterMode === 'availableOnly') {
+            return prices.filter(price => price.available);
+        }
+        if (currentPriceFilterMode === 'withPriceOnly') {
+            return prices.filter(price => isFinite(getSortablePriceValue(price)));
+        }
+        if (currentPriceFilterMode === 'unavailableOnly') {
+            return prices.filter(price => !price.available || !isFinite(getSortablePriceValue(price)));
+        }
+        return prices;
+    }
+
+    function onPriceSortChange() {
+        const select = document.getElementById('priceSortSelect');
+        if (!select) return;
         currentPriceSortMode = select.value;
+        renderOnlinePrices(currentOnlinePrices);
+    }
+
+    function onPriceFilterChange() {
+        const select = document.getElementById('priceFilterSelect');
+        if (!select) return;
+        currentPriceFilterMode = select.value;
         renderOnlinePrices(currentOnlinePrices);
     }
 
@@ -1096,22 +1338,48 @@
             return;
         }
 
-        const sortedPrices = sortOnlinePrices(prices, currentPriceSortMode);
+        const filtered = filterOnlinePrices(prices);
+        const sortedPrices = sortOnlinePrices(filtered, currentPriceSortMode);
+        const lowestPrice = getLowestAvailablePrice(sortedPrices);
+
+        if (sortedPrices.length === 0) {
+            priceResults.innerHTML = `
+                <div class="empty-state">
+                    Für den gewählten Anbieter-Filter sind aktuell keine Treffer verfügbar.
+                </div>
+            `;
+            return;
+        }
 
         let cards = `
             <div class="price-tools">
-                <div class="scroll-hint">
-                    Anbieter seitlich verschieben, um alle Preis-Karten anzusehen.
-                </div>
-
-                <div class="sort-wrap">
-                    <label class="sort-label" for="priceSortSelect">Sortierung</label>
-                    <select class="sort-select" id="priceSortSelect" onchange="onPriceSortChange()">
+                <div class="tool-group">
+                    <span class="tool-label">Sortierung</span>
+                    <select class="tool-select" id="priceSortSelect" onchange="onPriceSortChange()">
                         <option value="default" ${currentPriceSortMode === 'default' ? 'selected' : ''}>Standard</option>
                         <option value="priceAsc" ${currentPriceSortMode === 'priceAsc' ? 'selected' : ''}>Preis aufsteigend</option>
                         <option value="priceDesc" ${currentPriceSortMode === 'priceDesc' ? 'selected' : ''}>Preis absteigend</option>
+                        <option value="vendorAsc" ${currentPriceSortMode === 'vendorAsc' ? 'selected' : ''}>Anbieter A-Z</option>
                     </select>
                 </div>
+
+                <div class="tool-group">
+                    <span class="tool-label">Filter</span>
+                    <select class="tool-select" id="priceFilterSelect" onchange="onPriceFilterChange()">
+                        <option value="all" ${currentPriceFilterMode === 'all' ? 'selected' : ''}>Alle Anbieter</option>
+                        <option value="availableOnly" ${currentPriceFilterMode === 'availableOnly' ? 'selected' : ''}>Nur verfügbare</option>
+                        <option value="withPriceOnly" ${currentPriceFilterMode === 'withPriceOnly' ? 'selected' : ''}>Nur mit Preis</option>
+                        <option value="unavailableOnly" ${currentPriceFilterMode === 'unavailableOnly' ? 'selected' : ''}>Nur nicht verfügbar</option>
+                    </select>
+                </div>
+
+                <div class="tool-note">
+                    Angezeigt: ${sortedPrices.length} von ${prices.length} Anbietern
+                </div>
+            </div>
+
+            <div class="tool-note" style="margin-bottom: 12px;">
+                Anbieter seitlich verschieben, um alle Preis-Karten anzusehen.
             </div>
 
             <div class="cards-scroll">
@@ -1121,17 +1389,21 @@
             const link = safeUrl(price.productUrl);
             const availableClass = price.available ? 'availability available' : 'availability not-available';
             const availableText = price.available ? 'Preis verfügbar' : 'Kein Preis verfügbar';
-            const displayPrice = price.available ? formatPrice(price.unitPrice) : 'Kein Preis';
+            const sortableValue = getSortablePriceValue(price);
+            const isCheapest = lowestPrice !== null && isFinite(sortableValue) && Number(sortableValue) === Number(lowestPrice);
+            const displayPrice = price.available && isFinite(sortableValue) ? formatPrice(price.unitPrice) : 'Kein Preis';
 
             cards += `
-                <div class="price-card">
+                <div class="price-card ${isCheapest ? 'cheapest' : ''}">
+                    ${isCheapest ? '<div class="top-badge">Günstigster Anbieter</div>' : ''}
+
                     <div class="price-card-top">
                         <div class="vendor">
                             <a class="vendor-link" href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">
                                 ${escapeHtml(price.vendorName ?? '')}
                             </a>
                         </div>
-                        <div class="${price.available ? 'price' : 'price-unavailable'}">${displayPrice}</div>
+                        <div class="${price.available && isFinite(sortableValue) ? 'price' : 'price-unavailable'}">${displayPrice}</div>
                     </div>
 
                     <div class="muted">
@@ -1191,7 +1463,6 @@
         const searchValue = input.value.trim();
 
         const debug = document.getElementById('debug');
-        const results = document.getElementById('results');
         const priceResults = document.getElementById('priceResults');
         const tableSummary = document.getElementById('tableSummary');
         const priceSummary = document.getElementById('priceSummary');
@@ -1202,11 +1473,17 @@
             debug.textContent = 'Bitte einen Suchbegriff eingeben';
             tableSummary.textContent = 'Keine Eingabe';
             priceSummary.textContent = '0 Anbieter';
-            setMetrics('Leer', 0, 0);
+            setMetrics('Leer', 0, 0, null);
+
             currentOnlinePrices = [];
             currentPriceSortMode = 'default';
+            currentPriceFilterMode = 'all';
 
-            results.innerHTML = `
+            currentLocalParts = [];
+            currentLocalSortMode = 'default';
+            currentLocalFilterMode = 'all';
+
+            document.getElementById('results').innerHTML = `
                 <div class="empty-state">
                     Bitte zuerst eine Bauteilnummer, einen Namen oder einen Typ eingeben.
                 </div>
@@ -1220,10 +1497,11 @@
             return;
         }
 
+        setLoadingState(true);
         debug.textContent = 'Suche nach: ' + searchValue + ' ...';
         tableSummary.textContent = 'Suche läuft';
         priceSummary.textContent = 'Wird geladen';
-        setMetrics('Suche', 0, 0);
+        setMetrics('Suche', 0, 0, null);
 
         fetch('/api/parts/search?partNumber=' + encodeURIComponent(searchValue))
             .then(response => response.json())
@@ -1232,73 +1510,23 @@
                 const onlinePrices = result.onlinePrices || [];
                 const averageOnlinePrice = result.averageOnlinePrice || 0;
                 const message = result.message || 'Suche abgeschlossen';
+                const lowestPrice = getLowestAvailablePrice(onlinePrices);
+
+                currentLocalParts = localParts;
+                currentLocalSortMode = 'default';
+                currentLocalFilterMode = 'all';
 
                 currentOnlinePrices = onlinePrices;
                 currentPriceSortMode = 'default';
+                currentPriceFilterMode = 'all';
 
                 debug.textContent = message;
                 tableSummary.textContent = localParts.length + ' Treffer';
                 priceSummary.textContent = onlinePrices.length + ' Anbieter';
-                setMetrics(localParts.length > 0 ? 'Gefunden' : 'Leer', localParts.length, averageOnlinePrice);
+                setMetrics(localParts.length > 0 ? 'Gefunden' : 'Leer', localParts.length, averageOnlinePrice, lowestPrice);
+                document.getElementById('heroVendorCount').textContent = onlinePrices.length || 0;
 
-                if (localParts.length === 0) {
-                    results.innerHTML = `
-                        <div class="empty-state">
-                            Keine passenden Lagerteile gefunden. Versuch es mit 1N4148, ATMEGA, LM358, resistor, capacitor oder transistor.
-                        </div>
-                    `;
-                } else {
-                    let html = `
-                        <div class="table-scroll-hint">
-                            Lagerbestand vertikal scrollen, um viele Treffer durchzublättern. Die Spaltenüberschrift bleibt oben sichtbar.
-                        </div>
-                        <div class="table-wrap">
-                            <div class="table-scroll">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Bauteilnummer</th>
-                                            <th>Name</th>
-                                            <th>Typ</th>
-                                            <th>Bauart</th>
-                                            <th>Bestand</th>
-                                            <th>Einkauf</th>
-                                            <th>1 Stk</th>
-                                            <th>10 Stk</th>
-                                            <th>100 Stk</th>
-                                            <th>1000 Stk</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                    `;
-
-                    localParts.forEach(part => {
-                        html += `
-                            <tr>
-                                <td class="mono">${escapeHtml(part.partNumber ?? '')}</td>
-                                <td>${escapeHtml(part.name ?? '')}</td>
-                                <td><span class="tag tag-type">${escapeHtml(part.type ?? '')}</span></td>
-                                <td><span class="tag tag-mount">${escapeHtml(part.mountType ?? '')}</span></td>
-                                <td><span class="${getStockBadgeClass(part.stockQuantity ?? 0)}">${part.stockQuantity ?? 0}</span></td>
-                                <td class="price-good">${formatPrice(part.purchasePriceEur)}</td>
-                                <td class="tier-price">${formatPrice(part.price1Eur)}</td>
-                                <td class="tier-price">${formatPrice(part.price10Eur)}</td>
-                                <td class="tier-price">${formatPrice(part.price100Eur)}</td>
-                                <td class="tier-price">${formatPrice(part.price1000Eur)}</td>
-                            </tr>
-                        `;
-                    });
-
-                    html += `
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    `;
-
-                    results.innerHTML = html;
-                }
-
+                renderLocalParts(currentLocalParts);
                 renderOnlinePrices(currentOnlinePrices);
             })
             .catch(error => {
@@ -1307,11 +1535,17 @@
                 debug.textContent = 'Fehler bei der Suche';
                 tableSummary.textContent = 'Fehler';
                 priceSummary.textContent = 'Fehler';
-                setMetrics('Fehler', 0, 0);
+                setMetrics('Fehler', 0, 0, null);
+
                 currentOnlinePrices = [];
                 currentPriceSortMode = 'default';
+                currentPriceFilterMode = 'all';
 
-                results.innerHTML = `
+                currentLocalParts = [];
+                currentLocalSortMode = 'default';
+                currentLocalFilterMode = 'all';
+
+                document.getElementById('results').innerHTML = `
                     <div class="empty-state">
                         Bei der Suche ist ein Fehler aufgetreten. Bitte prüfe Backend, API oder Console.
                     </div>
@@ -1322,6 +1556,9 @@
                         Online-Preise konnten nicht geladen werden.
                     </div>
                 `;
+            })
+            .finally(() => {
+                setLoadingState(false);
             });
     }
 
@@ -1339,7 +1576,7 @@
 
     document.addEventListener('click', function (event) {
         const inputArea = document.querySelector('.input-area');
-        if (!inputArea.contains(event.target)) {
+        if (inputArea && !inputArea.contains(event.target)) {
             hideSuggestions();
         }
     });
